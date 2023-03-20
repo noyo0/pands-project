@@ -18,6 +18,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 #-------------------read in --------------------------------------------------------------------------------
 file="iris practice.data"
+#----read in with giving headers to each column-----------------------
 df=pd.read_csv(file, names=[
     "sepal length (cm)", 
     "sepal width (cm)", 
@@ -26,14 +27,30 @@ df=pd.read_csv(file, names=[
     "class"])
 #------------------------check first 5 lines-------------------------------------------------------
 # print(df.head(5))
-#-------------------filter --------------------------------------------------------------------------------
+
+#____________________________---F I L T E R ---_________________________________________________________
+
 ##print(df["class"]) print "class" column only
 #print(df["class"][145]) 145th entry in "class" column
-#----------conditional filtering------------------------------------------------------------------------------------
-# print(df.loc[df["petal length (cm)"]>6.1]) # conditional filtering
+
+#.............conditional filtering....__df.loc function____......................................
+# # print(df.loc[df["petal length (cm)"]>6.1]) # conditional filtering
+# ------------------combined filters-------------------
+# print(df.loc[(df["class"] == "Iris-setosa") | (df["petal width (cm)"] == 0.2) & (df["sepal width (cm)"] > 3.2)]) # ----- "&" means AND, "|" means OR
+# ---------------filter for part of text----------------------------------
+# print(df.loc[df["class"].str.contains("setos")])
+# ---------------filter OUT for part of text----------------------------------
+#print(df.loc[~df["class"].str.contains("setos")]) 
+
+
+
+
+
+#__________________________
 #------------loop through individual objects---------------------------------------------------------------------------------------
 #for index, row in df.iterrows(): # print individually each object
 #    print(index, row['class']) #filter to 'class' column
+
 #----------basic statistical-------------------------------------------------------------------------------------------
 #print(df.describe()) # gives simple stats of the data.
 #-----------basic plotting-------------------------------------------------------------------------------------------
@@ -46,12 +63,17 @@ df=pd.read_csv(file, names=[
 #print(df.sort_values(["class","petal width  (cm)"], ascending=[1,0])) # class is ascending, petal widht is descending
 
 #--****------making chnages to data------*****--------------------------------------
+
 #------- add summary column "Total"----------------
 #df['Total'] = df["sepal length (cm)"]+df["sepal width (cm)"]+df["petal length (cm)"]+df["petal width (cm)"]
 #print(df.head(5))
 #--------- remove column "Total" -----------------
-#-------------another adding texhinc (quicker)-------(axis=0 (or axis='rows' is horizontal axis. axis=1 (or axis='columns') is vertical axis)--
+#-------------another adding techinc (quicker)-----df.iloc[all rows, columns 1-3].sum˛[axis=0 rows, axis=1 columns]--
+#df["Total"] = df.iloc[:,0:4].sum(axis='columns') # ----(axis=0 (or axis='rows' is horizontal axis. axis=1 (or axis='columns') is vertical axis)-----
+#print(df.head(5))
 
-df["Total"] = df.iloc[:,0:4].sum(axis='columns') # df.iloc[all rows, columns 1-3].sum˛[axis=0 rows, axis=1 columns]---------
-print(df.head(5))
+#-----------Saving data --------------------------------
+#df.to_csv("modified.csv")
+#df.to_excel("modified_tab.xlsx", index=False) # save to Excle without 'index' column.
+#df.to_csv("modified_tab.csv", index=False, sep='\t') # save to csv without 'index' column and tab separated not comma.
 
