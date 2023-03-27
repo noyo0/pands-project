@@ -25,29 +25,31 @@ import seaborn as sns # # for creating prettier graphical representation of data
 import os # for file operations
 
 # ------------- load data and add headers --------------
-sourcedata="iris.data"
-df=pd.read_csv(sourcedata, names=[ # ref: header names taken from "iris.names"
+SOURCEDATA="iris.data"
+#----read in with giving headers to each column-----------------------
+headers=[
     "sepal length (cm)", 
     "sepal width (cm)", 
     "petal length (cm)", 
     "petal width (cm)",
-    "species"])
+    "species"]
+df=pd.read_csv(SOURCEDATA, names=headers)
 
 # ------------- analysis  --------------
-described=df.describe()
+#described=df.describe()
 #print(test.loc[test.index=='std']) # standard dev only
-print(described)
+#print(described)
 
 # ------------- plot  --------------
 #test.loc[test.index == "std"].plot(kind='bar') # bar plot without 'count' series
-df["sepal length (cm)"].hist()
+#df["sepal length (cm)"].hist()
 '''sns.scatterplot( # scatter plot with selected variables
     x="sepal length (cm)", 
     y="sepal width (cm)",
     hue='species',
     data=df)
 plt.legend(bbox_to_anchor=(1, 1), loc=0) # placing plot legend'''
-plt.show()
+#plt.show()
 
 '''# ------------- save results to txt file  --------------
 FILENAME ="analysisReport.txt"
@@ -57,3 +59,18 @@ if os.path.exists(FILENAME):
 else:
     with open(FILENAME, "wt") as f:
         f.write(df.describe())'''
+
+# output to single file -------------------
+def fn_output(myvar):
+    t=df.groupby("species")[myvar].describe()[['mean','std','min','max']]
+    return(t)
+#customise and unstack .describe()function ref: https://stackoverflow.com/questions/19124148/modify-output-from-python-pandas-describe
+#print("\n", myvar,"-->\n", df.groupby("species")[myvar].describe().unstack()[['mean','std','min','max']],"\n____________________________________________________________________________")
+myvars= headers[:-1]
+text=[]
+ttext={}
+for myvar in myvars:
+    text.append(fn_output(myvar))
+    ttext={myvar:text}
+
+print(ttext)
