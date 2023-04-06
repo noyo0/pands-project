@@ -35,42 +35,41 @@ headers=[
     "species"]
 df=pd.read_csv(SOURCEDATA, names=headers)
 
-# ------------- analysis  --------------
-#described=df.describe()
-#print(test.loc[test.index=='std']) # standard dev only
-#print(described)
+# ----create summary of each variable and output summary.txt-------------
+summary=df.describe()
+output=(f"THE SUMMARY OF EACH VARIABLE IN THE IRIS DATASHEET\n\n {summary}")
+with open('summary.txt','w') as f:
+    #f.write("THE SUMMARY OF EACH VARIABLE IN THE IRIS DATASHEET\n",df.describe().to_string())
+    f.write(output)
 
-# ------------- plot  --------------
-#test.loc[test.index == "std"].plot(kind='bar') # bar plot without 'count' series
-#df["sepal length (cm)"].hist()
-'''sns.scatterplot( # scatter plot with selected variables
-    x="sepal length (cm)", 
-    y="sepal width (cm)",
-    hue='species',
-    data=df)
-plt.legend(bbox_to_anchor=(1, 1), loc=0) # placing plot legend'''
-#plt.show()
+# Create histogram of each variable and save results in png files
 
-'''# ------------- save results to txt file  --------------
-FILENAME ="analysisReport.txt"
-if os.path.exists(FILENAME):
-    with open(FILENAME, "wt") as f:
-        f.write(test)
-else:
-    with open(FILENAME, "wt") as f:
-        f.write(df.describe())'''
+# create a function to draw and save the histograms with column data as variable and column name as file name
+def fn_pnghist(column):
+    plt.style.use('fast')
+    plt.grid(True, color="#7e9964", linestyle="dotted")
+    df[column].hist(bins=10, color="#5a4fcf")
+    plt.suptitle(f"Histogram of {column}")
+    plt.savefig(f"{column}.png") # save plot ref: https://chartio.com/resources/tutorials/how-to-save-a-plot-to-a-file-using-matplotlib/
+    plt.show() # turns out plt.show() must be left in the end of the function to avoide having all histograms on one plot 💁
 
-# output to single file -------------------
-def fn_output(myvar):
-    t=df.groupby("species")[myvar].describe()[['mean','std','min','max']]
-    return(t)
-#customise and unstack .describe()function ref: https://stackoverflow.com/questions/19124148/modify-output-from-python-pandas-describe
-#print("\n", myvar,"-->\n", df.groupby("species")[myvar].describe().unstack()[['mean','std','min','max']],"\n____________________________________________________________________________")
-myvars= headers[:-1]
-text=[]
-ttext={}
-for myvar in myvars:
-    text.append(fn_output(myvar))
-    ttext={myvar:text}
 
-print(ttext)
+#create a for loop to cycle through the variables in iris data and call the 'fn_hist' function to draw the histograms with each variable as per their column label
+cols=headers[:-1] # created shorter list from 'headers' to avoid including the 'species column' that is not one of the measurements short list stored in 'cols'
+for c in cols:
+    fn_pnghist(c)
+
+'''
+plt.style.use('fivethirtyeight')
+plt.legend(facecolor='k', labelcolor='b')
+#----- scatter plot for sepal variables
+ax_x = "sepal length (cm)"
+ax_y = "sepal width (cm)"
+sns.scatterplot(data=df,x=ax_x, y=ax_y, hue='species')
+plt.show()
+#----- scatter plot for petal variables
+ax_x = "petal length (cm)"
+ax_y = "petal width (cm)"
+sns.scatterplot(data=df,x=ax_x, y=ax_y, hue='species')
+plt.show()
+'''
