@@ -1,4 +1,4 @@
-THE SUMMARY OF EACH VARIABLE IN THE IRIS DATASHEET
+THE SUMMARY OF EACH VARIABLE IN THE IRIS DATASHEET:
 
        sepal length (cm)  sepal width (cm)  petal length (cm)  petal width (cm)
 count         150.000000        150.000000         150.000000        150.000000
@@ -11,7 +11,7 @@ min             4.300000          2.000000           1.000000          0.100000
 max             7.900000          4.400000           6.900000          2.500000
 
 
-THE SUMMARY OF EACH VARIABLE BY SPECIES IN THE IRIS DATASHEET
+THE SUMMARY OF EACH VARIABLE BY SPECIES IN THE IRIS DATASHEET:
 
 					Iris-setosa
 
