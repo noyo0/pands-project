@@ -63,13 +63,13 @@ def fn_textsummary():
 
 # ------- Create histogram of each variable and save results in png files 
 def fn_pnghist(column):
-    plt.style.use('dark_background')
+    plt.style.use('fast')
     plt.grid(True, color="#7e9964", linestyle="dotted")
     df[column].hist(bins=10, color="#5a4fcf")
     plt.suptitle(f"Histogram of {column}")
     plt.savefig(f"{column}.png") # save plot ref: https://chartio.com/resources/tutorials/how-to-save-a-plot-to-a-file-using-matplotlib/
     plt.show() # turns out plt.show() must be left in the end of the function to avoide having all histograms on one plot 💁
-    print(f"\nPlot saved as {column}.png")
+    print(f"\nPlot saved as <{column}.png>")
 
 # ------ create a for loop to cycle through the variables in iris data and call the 'fn_hist' function to draw the histograms with each variable as per their column label
 def fn_makehists():
@@ -87,11 +87,11 @@ def fn_pairplot():
     #------output to -png
     plt.savefig(f"pairplot.png")
     plt.show(block = False)
-    plt.pause(8) #plot only showed in jupyter, workaround ref: https://pythonguides.com/matplotlib-not-showing-plot/
-    plt.close()
-    print("\n Plot saved as pairplot.png")
-
-# ------ Display a scatter plot for sepal and petal measurement pair separately
+    plt.pause(7) #plot only showed in jupyter, workaround ref: https://pythonguides.com/matplotlib-not-showing-plot/
+    plt.close('all')
+    print("\n Plot saved as <pairplot.png>")
+    
+# ------ Display a scatter plot for sepal and petal measurement pairs separately
 def fn_sepal_petal():
 #-----Set plot style 
     plt.style.use('fast') #ref: https://matplotlib.org/stable/gallery/style_sheets/index.html
@@ -117,11 +117,15 @@ def fn_sepal_petal():
     #------output to -png
     plt.savefig(f"sepal_petal.png")
     plt.show()
+    print("\n Plot saved as <sepal_petal.png>")
 
 # ------- display and save both versions of the scatter plots
 def fn_scatters():
     fn_sepal_petal()
     fn_pairplot()
+
+    
+
 
 # ------- Correlation Heatmap
 def fn_heatmap():
@@ -138,6 +142,7 @@ def fn_heatmap():
     # save to file
     plt.savefig("heatmap.png")
     plt.show()
+    print("\n Plot saved as <heatmap.png>")
 
 #---!!!! ------ Program run -------------
 
@@ -149,5 +154,4 @@ def fn_heatmap():
 # 5. Correlation - Heatmap
 
 fn_scatters()
-
 

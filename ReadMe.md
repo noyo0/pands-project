@@ -141,9 +141,11 @@ Since the data is not separated by species the resulting histograms are more sui
 ## Project task 3. Output a scatter plot of each pair of variables
 #### (Program menu: 4.) - Output saved in **pairplot.png** and **sepal_petal.png**
 
-FOLYTKÖÖÖÖÖÖÖÖÖÖVIIIIIIIIiiiiiiiiii --------------To make comparison easier the two pairs of measurements were plotted side by side using subplots. 
-It's quite clear from the two scatter plots, that the most distinguishing measurement pair to visualise the differences between the three Iris species is the Petal width and length. 
-While there is significant overlap in sepal length and width between the species, in case of the petal measurements Iris-setosa very clearly separated and the majority of the versicolor and virginica samples are also stand apart with only marginal overlap. 
+Pairplot from the Seaborn library of Python is used for creating a grid of scatterplots and histograms, visualizing the relationships between each pair of the Iris measurements. The comparison is made easier by having all the pairs of measurements plotted side by side using subplots. The three separate species are colour coded in order to distinguish which measurement belongs to which Iris species. (pairplot.png) <br>
+The pairplot demonstrates that Iris-setosa measurements are showing in their own cluster on multiple plots while versicolor and virginica have overlapping measurements in all.
+<br>
+Plotting petal and sepal measurements side by side on a separate plot it is more noticeable (sepal_petal.png) that while there is significant overlap in sepal length and width between the species, in case of the petal measurements Iris-setosa very clearly separated and the majority of the versicolor and virginica samples are also stand apart with only marginal overlap. 
+Based on the scatter plots the most distinguishing measurement pair to visualise the differences between the three Iris species is the Petal width and length. 
 
 
 
