@@ -9,7 +9,7 @@
 <br>
 The Iris flower data set, also known as Fisher’s Iris data set, is a multivariate data set that was introduced by British statistician and biologist Ronald Fisher. <br>The data was collected by Edgar Anderson to quantify the morphologic variation of Iris flowers of three related species and was utilised by Fisher to demonstrate the use of linear discriminant analysis in his 1936 paper titled “The use of multiple measurements in taxonomic problems” published in the Annals of Eugenics.
 <br>Today the dataset is widely used as a typical test case for statistical classification in machine learning. 
-The Iris dataset contains 50 samples of three Iris flower species: Iris setosa, Iris virginica, and Iris versicolor. Each sample has four features measured in centimetres: sepal and petal length and width. Using these four variables, Ronald Fisher developed a linear discriminant model to differentiate between the species.<br>
+The Iris dataset contains 50 samples of three Iris flower species: Iris setosa, Iris virginica, and Iris versicolor. Each sample has four features measured in centimetres: sepal length and width and petal length and width. Using these four variables, Ronald Fisher developed a linear discriminant model to differentiate between the species.<br>
 (ref: https://en.wikipedia.org/wiki/Iris_flower_data_set )
 <br>
 
@@ -24,9 +24,10 @@ The program **analysys.py** can be found and executed from the root directory.
 3. Display and save a histogram of each varaible
 4. Display a scatter plot of each pair of variables
 5. Correlation - Heatmap
+6. ---+++ continue----+++
 
 The relevant *Program menu* will be noted under the title of each section of the analyis.
-Output from the program is saved in the root folder. Filenames will be noted at the relevant sections.
+Output from the program is saved in the root folder. Filenames will be noted at the relevant sections as well.
 
 ### Modules used for this project
 
@@ -37,12 +38,13 @@ Output from the program is saved in the root folder. Filenames will be noted at 
 
 ### Datasource:
 
-**iris.data** and **iris.names** files downloaded from https://archive.ics.uci.edu/ml/datasets/iris in a comma-separated value file format
+Source files downloaded from https://archive.ics.uci.edu/ml/datasets/iris 
+The source file **iris.data** is in a comma-separated value file format without headers, **iris.names** is a brief description of the dataset which contains information regarding the headers for the data. 
 
 ### Reading in data
 Data will be analysed using mainly Pandas which is a popular data analysis library in Python that provides user-friendly data structures and data analysis tools. The comma separated value file is converted to Pandas DataFrame which is a two-dimensional table with labelled columns and rows, similar to a spreadsheet. (ref: https://towardsdatascience.com/a-python-pandas-introduction-to-excel-users-1696d65604f6)
 
-Iris flower measurement values are imported from **iris.data**, header lables added manually from **iris.names** and the two combined into a pandas dataframe. <br>
+Iris flower measurement values are imported from **iris.data**, header lables added manually from the data description in **iris.names** and the two combined into a pandas dataframe. <br>
 
 ### Data validation and structure 
 #### (Program menu: 1.)
@@ -86,7 +88,7 @@ Memory usage: 6.0+ KB
 | petal width (cm)   | 0            |
 | species            | 0            |
 
-It appears that the datafdrame contains 150 value entries per column, 4 columns contain floating point numbers and one contains text data and there is an added index column that is assigned by pandas automatically when creating the dataframe. (Automatic indexing ref: https://blog.hubspot.com/website/pandas-indexing)
+It appears that the dataframe contains 150 value entries per column, 4 columns contain floating point numbers and one contains text data and there is an added index column that is assigned by pandas automatically when creating the dataframe. (Automatic indexing ref: https://blog.hubspot.com/website/pandas-indexing)
 In the subsequent check "Checking for Null entries", it was found that there are no Null entries in the dataframe. <br> Null entries can cause unexpected results with calculations, comparison of data and pandas functions. (Dealing with Null values ref: https://medium.com/geekculture/dealing-with-null-values-in-pandas-dataframe-1a67854fe834)
 
 + #### **Snapshot wiew of the created Dataframe**
@@ -131,7 +133,7 @@ Initial summary reveals that there are 150 values for each measurement which mak
 *As per the project task description, the results of the summary analysis are saved into a text file (summary.txt) that includes both an overall summary of the data and a species-specific summary, divided by title text for ease of readability.*
 
 ## Project task 2. Create histogram of each variable and save results in png files 
-#### (Program menu: 3.) - output saved to image files in >measurement<.png format (eg. sepal width (cm).png)
+#### (Program menu: 3.) - output saved in separate image files in >measurement<.png format (eg. sepal width (cm).png)
 
 A histogram is a plot that shows frequency distribution (shape) of a set of values.(ref: https://statistics.laerd.com/statistical-guides/understanding-histograms.php) A histogram in the context of the Iris dataset can visualise the distribution of the various measurement values of the dimensions of the petals and sepals of the Iris flower. <br>
 Since the data is not separated by species the resulting histograms are more suitable to identify outliers and errors but it is worth notig that on the histograms of the petal lenght and the petal width (see: *petal length (cm).png* and *petal width (cm).png*) a higher frequency of small value measurements can be seen in clusters. Significance of this observation is yet to be determined.
