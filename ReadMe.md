@@ -128,7 +128,7 @@ Pandas DataFrame describe() method returns a description of the data in the Data
 (ref: https://www.w3schools.com/python/pandas/ref_df_describe.asp#:~:text=The%20describe()%20method%20returns,std%20%2D%20The%20standard%20deviation)
 
 Initial summary reveals that there are 150 values for each measurement which makes later comparisons easier. It also shows that based on the standard variation (std) figures, sepal width values have the lowest variation and the petal length values have the highest. However, it is more useful to separate these figures by species so the data can be used for comparison.
-<br>The describe() method iterated through each of the species provides a more comprehensive view of the data. It shows that every species have an equal number of samples (50) for each of the 4 measurements. This will allow direct comparison without truncating for example. However, differences between species are not significant enough to rely on numeric analysis alone. Graphical representation of the data is more suitable to highlight the differences and similarities among the species...
+<br>The describe() method iterated through each of the species provides a more comprehensive view of the data. It shows that every species have an equal number of samples (50) for each of the 4 measurements. This will allow direct comparison without truncating for example. At first glance, differences between species are not significant enough to rely on numeric analysis alone. Graphical representation of the data is more suitable to highlight the differences and similarities among the species...
 
 *As per the project task description, the results of the summary analysis are saved into a text file (summary.txt) that includes both an overall summary of the data and a species-specific summary, divided by title text for ease of readability.*
 
@@ -136,7 +136,18 @@ Initial summary reveals that there are 150 values for each measurement which mak
 #### (Program menu: 3.) - output saved in separate image files in >measurement<.png format (eg. sepal width (cm).png)
 
 A histogram is a plot that shows frequency distribution (shape) of a set of values.(ref: https://statistics.laerd.com/statistical-guides/understanding-histograms.php) A histogram in the context of the Iris dataset can visualise the distribution of the various measurement values of the dimensions of the petals and sepals of the Iris flower. <br>
-Since the data is not separated by species the resulting histograms are more suitable to identify outliers and errors but it is worth notig that on the histograms of the petal lenght and the petal width (see: *petal length (cm).png* and *petal width (cm).png*) a higher frequency of small value measurements can be seen in clusters. Significance of this observation is yet to be determined.
+Key characteristics of histograms are *peaks* and *spread* that represent the most typical values and how much the data variates, *skewed data* or presence of *outliers* may indicate patterns that could be investigated or errors in the sample.
+(ref: https://support.minitab.com/en-us/minitab/21/help-and-how-to/graphs/histogram/interpret-the-results/key-results/)
++ **Histogram of sepal lenghts (cm)**
+    The histogram is quite widely spread, slightly skewed to the left towards the smaller values which indicates that sepals with shorter than the median lenght are more common than long ones, lenghts around 5.5cm seem to be the most common but there are peaks of sample lengths just under 5cm and between 6.0 and 6.5cm as well.
++ **Histogram of sepal width (cm)**
+    This histogram has a narrow spread which is not surprising as standard deviation is the smallest in this cathegory at 0.433594. There is a significant peak in the middle at around 3.0cm widths. 
++ **Histogram of petal length (cm)**
+    This is a multimodal histogram with two distinct peaks, one at the extreme left indicating a large number of samples with short petals while the other peak is at 4-5cm with a wider base representing the rest of the samples.
++ **Histogram of petal width (cm)**
+    Similar to the previous histogram this is also a multimodal histogram however with multiple peaks, the one at the extreme left shows a significant number of samples with narrow petals.
+
+Since the data is not separated by species the resulting histograms are more suitable to identify outliers and errors but it is worth notig that both histograms representing petal measurements (see: *petal length (cm).png* and *petal width (cm).png*) show a higher frequency of small value measurements in clusters. 
 
 ## Project task 3. Output a scatter plot of each pair of variables
 #### (Program menu: 4.) - Output saved in **pairplot.png** and **sepal_petal.png**
@@ -144,10 +155,14 @@ Since the data is not separated by species the resulting histograms are more sui
 Pairplot from the Seaborn library of Python is used for creating a grid of scatterplots and histograms, visualizing the relationships between each pair of the Iris measurements. The comparison is made easier by having all the pairs of measurements plotted side by side using subplots. The three separate species are colour coded in order to distinguish which measurement belongs to which Iris species. (pairplot.png) <br>
 The pairplot demonstrates that Iris-setosa measurements are showing in their own cluster on multiple plots while versicolor and virginica have overlapping measurements in all.
 <br>
-Plotting petal and sepal measurements side by side on a separate plot it is more noticeable (sepal_petal.png) that while there is significant overlap in sepal length and width between the species, in case of the petal measurements Iris-setosa very clearly separated and the majority of the versicolor and virginica samples are also stand apart with only marginal overlap. 
-Based on the scatter plots the most distinguishing measurement pair to visualise the differences between the three Iris species is the Petal width and length. 
+When comparing petal and sepal measurements in pairs side by side on a separate plot (sepal_petal.png), it is apparent that there is considerable overlap in sepal length and width across the different species. However, in terms of petal measurements, Iris-setosa is clearly separated having the smallest petals, while the majority of the versicolor and virginica samples are also distinct, with only slight overlap between them. Virginica noticeably having the largest petals, both in terms of length and width.
+According to the scatter plots, the most effective pair of measurements for distinguishing between the three Iris species is petal width and length.
 
+## Project task 4. Any other analysis
 
+We know from the dataframe information that 
+
+#### (Program menu: 4.) - Output saved in **pairplot.png** and **sepal_petal.png**
 
 
 
