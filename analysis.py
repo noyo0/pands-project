@@ -25,13 +25,13 @@ import seaborn as sns # # for creating prettier graphical representation of data
 # ------------- load data and add headers --------------
 SOURCEDATA="iris.data"
 #----read in with giving headers to each column-----------------------
-headers=[
+headers=[ #adding headers to dataframe (also can be used as global variable)
     "sepal length (cm)", 
     "sepal width (cm)", 
     "petal length (cm)", 
     "petal width (cm)",
     "species"]
-df=pd.read_csv(SOURCEDATA, names=headers)
+df=pd.read_csv(SOURCEDATA, names=headers) # creating dataframe
 
 # ---- Data Validation -------------
 def fn_datavalidation():
@@ -63,6 +63,9 @@ def fn_textsummary():
 
 # ------- Create histogram of each variable and save results in png files 
 def fn_pnghist(column):
+    # ref: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.hist.html
+    # ref: https://www.geeksforgeeks.org/how-to-set-plot-background-color-in-matplotlib/
+    # ref: https://matplotlib.org/stable/tutorials/introductory/customizing.html
     plt.style.use('fast')
     plt.grid(True, color="#7e9964", linestyle="dotted")
     df[column].hist(bins=10, color="#5a4fcf")
@@ -80,7 +83,7 @@ def fn_makehists():
 # ------ Display a scatter plot of each pair of variables
 def fn_pairplot():
     plt.style.use('fast')
-    sns.pairplot(df, hue="species")
+    sns.pairplot(df, hue="species")  #ref: https://seaborn.pydata.org/generated/seaborn.pairplot.html
     specfont1 = {"family":"serif","color":"#4a6741",'weight':'bold',"size":14}
     plt.suptitle("Pair plot of measurements in the Iris dataset", fontdict=specfont1) # set title
     plt.subplots_adjust(top=0.95) # reducing size of the plot to make more room for the title.
@@ -93,7 +96,7 @@ def fn_pairplot():
     
 # ------ Display a scatter plot for sepal and petal measurement pairs separately
 def fn_sepal_petal():
-#-----Set plot style 
+    #-----Set plot style 
     plt.style.use('fast') #ref: https://matplotlib.org/stable/gallery/style_sheets/index.html
     plt.rc("font", family="serif")# default text style ref: customise default style ref: https://stackoverflow.com/questions/3899980/how-to-change-the-font-size-on-a-matplotlib-plot
     #-----two plots side by side ref: https://realpython.com/python-matplotlib-guide/#subplots, ref: https://stackoverflow.com/questions/42818361/how-to-make-two-plots-side-by-side
@@ -124,11 +127,9 @@ def fn_scatters():
     fn_sepal_petal()
     fn_pairplot()
 
-    
-
-
 # ------- Correlation Heatmap
 def fn_heatmap():
+    # correlation heatmap ref: https://zion-oladiran.medium.com/exploratory-data-analysis-iris-dataset-68897497b120
     # calculate correlation
     correlation = df.corr()
     # text report
@@ -144,6 +145,42 @@ def fn_heatmap():
     plt.show()
     print("\n Plot saved as <heatmap.png>")
 
+
+# -------------conditional means
+def fn_condmeans():
+    # seaborn galery ref: https://seaborn.pydata.org/examples/jitter_stripplot.html
+    sns.set_theme(style="darkgrid", font='serif') # set style
+    # "Melt" the dataset to "long-form" or "tidy" representation
+    iris = pd.melt(df, "species", var_name="measurements") # this will put all measurements into one column
+    # Initialize the figure
+    f, ax = plt.subplots()
+    sns.despine(bottom=True, left=True)
+    # Show each observation with a scatterplot
+    sns.stripplot( 
+        data=iris, x="value", y="measurements", palette="Set1",
+        dodge=True, alpha=.25, zorder=1
+    )
+    # Show the conditional means, aligning each pointplot in the
+    # center of the strips by adjusting the width allotted to each
+    # category (.8 by default) by the number of hue levels
+    sns.pointplot(
+        data=iris, x="value", y="measurements", hue="species",
+        join=False, dodge=.8 - .8 / 3, palette="dark",
+        markers="d", scale=.75, errorbar=None
+    )
+    plt.subplots_adjust(top=0.95,left=0.3) # adjusting plot to fit title and labels
+    ax.set_title("Conditional Means") # set title
+    # Improve the legend
+    sns.move_legend(
+        ax, loc="upper left", ncol=1, frameon=True, columnspacing=1, handletextpad=0
+    )    
+    plt.savefig("condmeans.png")
+    plt.show()
+    print("\n Plot saved as <condmeans.png>")
+
+# ------------------box plot
+def fn_boxplot():
+
 #---!!!! ------ Program run -------------
 
 #MENU 
@@ -151,7 +188,8 @@ def fn_heatmap():
 # 2. Summary of each variable ---> fn_textsummary()
 # 3. Display and save a histogram of each varaible ---> fn_makehists()
 # 4. Display a scatter plot of each pair of variables --> fn_pairplot()
-# 5. Correlation - Heatmap
+# 5. Conditional means
+# 6. Correlation - Heatmap
 
-fn_scatters()
+fn_boxplot()
 

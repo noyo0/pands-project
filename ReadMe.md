@@ -135,34 +135,55 @@ Initial summary reveals that there are 150 values for each measurement which mak
 ## Project task 2. Create histogram of each variable and save results in png files 
 #### (Program menu: 3.) - output saved in separate image files in >measurement<.png format (eg. sepal width (cm).png)
 
-A histogram is a plot that shows frequency distribution (shape) of a set of values.(ref: https://statistics.laerd.com/statistical-guides/understanding-histograms.php) A histogram in the context of the Iris dataset can visualise the distribution of the various measurement values of the dimensions of the petals and sepals of the Iris flower. <br>
+A histogram is a plot that shows frequency distribution (shape) of a set of values. A histogram in the context of the Iris dataset can visualise the distribution of the various measurement values of the dimensions of the petals and sepals of the Iris flower. (ref: https://statistics.laerd.com/statistical-guides/understanding-histograms.php) <br>
 Key characteristics of histograms are *peaks* and *spread* that represent the most typical values and how much the data variates, *skewed data* or presence of *outliers* may indicate patterns that could be investigated or errors in the sample.
-(ref: https://support.minitab.com/en-us/minitab/21/help-and-how-to/graphs/histogram/interpret-the-results/key-results/)
+(ref: https://chartio.com/learn/charts/histogram-complete-guide/)
 + **Histogram of sepal lenghts (cm)**
-    The histogram is quite widely spread, slightly skewed to the left towards the smaller values which indicates that sepals with shorter than the median lenght are more common than long ones, lenghts around 5.5cm seem to be the most common but there are peaks of sample lengths just under 5cm and between 6.0 and 6.5cm as well.
+    The histogram is quite widely spread, slightly skewed to the left towards the smaller values which indicates that sepals with shorter than the median lenght are more common than long ones. The data shows three distinct peaks indicating sepal lenghts around 5.5cm to be the most common but peaks of sample lengths just under 5cm and between 6.0 and 6.5cm are frequent as well.
 + **Histogram of sepal width (cm)**
-    This histogram has a narrow spread which is not surprising as standard deviation is the smallest in this cathegory at 0.433594. There is a significant peak in the middle at around 3.0cm widths. 
+    This histogram is almost symmetric indicating close to normal distribution and has a narrow spread which is not surprising as standard deviation is the smallest in this cathegory at 0.433594. 
 + **Histogram of petal length (cm)**
-    This is a multimodal histogram with two distinct peaks, one at the extreme left indicating a large number of samples with short petals while the other peak is at 4-5cm with a wider base representing the rest of the samples.
+    This is a bimodal histogram with two distinct peaks or modes, one at the extreme left indicating a large number of samples with short petals while the other peak is at 4-5cm with a wider base with an almost normal distribution shape. Multimodal histograms could indicate subgroups in the dataset.
 + **Histogram of petal width (cm)**
-    Similar to the previous histogram this is also a multimodal histogram however with multiple peaks, the one at the extreme left shows a significant number of samples with narrow petals.
+    This a multimodal histogram although similarly to the previous histogram, there is a distinct cluster at the extreme left showing a significant number of samples with narrow petals, the remaining samples are gathering in an almost separate multimodal shape with multiple peaks.
 
-Since the data is not separated by species the resulting histograms are more suitable to identify outliers and errors but it is worth notig that both histograms representing petal measurements (see: *petal length (cm).png* and *petal width (cm).png*) show a higher frequency of small value measurements in clusters. 
+Since the data is not separated by species the resulting histograms are more suitable to identify outliers and errors but it is worth notig that both histograms representing petal measurements (see: *petal length (cm).png* and *petal width (cm).png*) show a distinct cluster of samples with short and/or narrow petals. 
 
 ## Project task 3. Output a scatter plot of each pair of variables
 #### (Program menu: 4.) - Output saved in **pairplot.png** and **sepal_petal.png**
 
-Pairplot from the Seaborn library of Python is used for creating a grid of scatterplots and histograms, visualizing the relationships between each pair of the Iris measurements. The comparison is made easier by having all the pairs of measurements plotted side by side using subplots. The three separate species are colour coded in order to distinguish which measurement belongs to which Iris species. (pairplot.png) <br>
+A scatter plot uses dots to represent values of two numeric variables, with each dot indicating the values of an individual data point on the horizontal and vertical axis. It is used to visualise relationships between variables.  (ref: https://chartio.com/learn/charts/what-is-a-scatter-plot/) <br>
+Pairplot from the Seaborn library of Python is used for creating a grid of scatterplots and histograms, visualizing the pairwise relationships in a dataset. (ref: https://seaborn.pydata.org/generated/seaborn.pairplot.html) The comparison is made easier by having all the pairs of measurements plotted side by side using subplots. Where the same measurement paired, a histogram is drawn. The three separate species are colour coded in order to distinguish which measurement belongs to which Iris species. (pairplot.png) <br>
 The pairplot demonstrates that Iris-setosa measurements are showing in their own cluster on multiple plots while versicolor and virginica have overlapping measurements in all.
-<br>
 When comparing petal and sepal measurements in pairs side by side on a separate plot (sepal_petal.png), it is apparent that there is considerable overlap in sepal length and width across the different species. However, in terms of petal measurements, Iris-setosa is clearly separated having the smallest petals, while the majority of the versicolor and virginica samples are also distinct, with only slight overlap between them. Virginica noticeably having the largest petals, both in terms of length and width.
-According to the scatter plots, the most effective pair of measurements for distinguishing between the three Iris species is petal width and length.
+According to the scatter plots, the most effective pair of measurements for distinguishing between the three Iris species is petal width and length.<br>
+Scatter plots can also indicate correlation between pairs of variables as demonstrated on the Petal Measurements scatter plot (sepal_petal.png), where a correlation between petal length and width can be observed, revealing that the longer petals tend to be wider as well.
+
 
 ## Project task 4. Any other analysis
 
-We know from the dataframe information that 
+### Conditional means 
+#### (Program menu: 5.) - Output saved in **condmeans.png**
 
-#### (Program menu: 4.) - Output saved in **pairplot.png** and **sepal_petal.png**
+The "Conditional Means" (condmeans.png) plot is a direct reutilisation of a sample plot from the seaborn plot gallery. 
+It is combining a strip plot for each of the flower measurement values and point plot for each of the means figures for each of the values grouped by species. The chart indicates the distinction of Iris-setosa values once agin but it doesn't reveal additional information about the data, certainly can't assist with the distinction of the other two species. 
+
+### Correlation - Heatmap
+#### (Program menu: 6.) - Output saved in **heatmap.png**
+
+Correlation between the different columns of the data can be calculated using pandas .corr() function which using the Pearson method as default. (ref: https://zion-oladiran.medium.com/exploratory-data-analysis-iris-dataset-68897497b120)  
+The Pearson correlation coefficient, that falls between -1 and 1, measures linear correlation. A coefficient of 1 indicates positive correlation, while a coefficient of -1 indicates negative correlation. A coefficient of 0 means that the two variables likely have no effect on each other. (ref: https://www.scribbr.com/statistics/pearson-correlation-coefficient/#:~:text=The%20Pearson%20correlation%20coefficient%20(r,the%20relationship%20between%20two%20variables.) 
+The resulting correlation matrix is displayed in terminal output however, a graphical representation of the matrix would help recognisding relevant patterns in the data.
+A heatmap is a two-dimensional data-representation in which values are represented by colors to show relationships between two variables, one plotted on each axis. (ref: vhttps://chartio.com/learn/charts/heatmap-complete-guide/)
+Such plot can be used for the representation of a correlation matrix, showing the relationships between pairs of variables as a grid of colored squares. Each square's color represents the value of the correlation coefficient.
+Using seaborn .heatmap plot function the resulting heatmap reveals that there is a strong positive correlation (0.96) between petal length and petal width, as well as between sepal length and petal length and width (0.87 and 0.82). 
+This indicates that the larger petals retain their proportions as they grow in size as the wider they are their lenght increases. Also that a flower with a longer sepal will likely have a larger petal. 
+Sepal width has a weak negative correlation with petal length and petal width. This suggests that the sepals may become slightly narrower as the petals grow in size. 
+
+### Value distribution among the species - Box plot
+
+A boxplot (or box and whisker plot) is the visualisation of data distribution based on five attributes; minimum, first quartile, median, third quartile and maximum. (ref: https://builtin.com/data-science/boxplot) The box represents the central 50% of the data with a line representing the median value, while the whiskers cover the remaining range of the data. Outliers are plotted outside the whsikers range as individual points. ˙ref: https://chartio.com/learn/charts/box-plot-complete-guide/)
+
 
 
 
