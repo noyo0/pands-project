@@ -180,9 +180,16 @@ Using seaborn .heatmap plot function the resulting heatmap reveals that there is
 This indicates that the larger petals retain their proportions as they grow in size as the wider they are their lenght increases. Also that a flower with a longer sepal will likely have a larger petal. 
 Sepal width has a weak negative correlation with petal length and petal width. This suggests that the sepals may become slightly narrower as the petals grow in size. 
 
-### Value distribution among the species - Box plot
+### Petal Lenght and width measuement distribution among the species - Box plot
+#### (Program menu: 6.) - Plot saved in **heatmap.png**, petal measurement minimum and maximum data output to the terminal
 
 A boxplot (or box and whisker plot) is the visualisation of data distribution based on five attributes; minimum, first quartile, median, third quartile and maximum. (ref: https://builtin.com/data-science/boxplot) The box represents the central 50% of the data with a line representing the median value, while the whiskers cover the remaining range of the data. Outliers are plotted outside the whsikers range as individual points. ˙ref: https://chartio.com/learn/charts/box-plot-complete-guide/)
+As previous visualisations demonstrated, petal measurements are the most usefull to distinguish the species therefore the box plot only focuses on petal lenght and width divided into two subplot arranged vertically. The three species are plotted on the same subplot for easier copmparison. 
+Once again, Iris-setosa shown completely separately on both subplots, just as it did in the scatter plots. The other two species also demonstrate the same overlap as before.
+However, unlike the scatter plot that was very informative with regards to individual datapoints, the box plot provides a comprehensive picture of the data distribution, showing the median, typical values, and outliers.
+Typical values or the central 50% of the datapoints show distinction between versicolor and virginica although 
+
+Since the petal length data gives a wider range of values in different data points than the petal width data, it is more suitable to focus on the petal lenghts.
 
 
 
