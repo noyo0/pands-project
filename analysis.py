@@ -17,7 +17,7 @@
 # >>> Further references on individual problems are noted in the ReadMe.md file.
 
 # ------------- load modules  --------------
-import numpy as np # for mathematicalfunctions
+#import numpy as np # for mathematicalfunctions
 import pandas as pd # for data analysis
 import matplotlib.pyplot as plt # for creating graphical representation of data
 import seaborn as sns # # for creating prettier graphical representation of data

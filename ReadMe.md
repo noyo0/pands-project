@@ -8,7 +8,7 @@
 ### Introduction
 <br>
 The Iris flower data set, also known as Fisher’s Iris data set, is a multivariate data set that was introduced by British statistician and biologist Ronald Fisher. <br>The data was collected by Edgar Anderson to quantify the morphologic variation of Iris flowers of three related species and was utilised by Fisher to demonstrate the use of linear discriminant analysis in his 1936 paper titled “The use of multiple measurements in taxonomic problems” published in the Annals of Eugenics.
-<br>Today the dataset is widely used as a typical test case for statistical classification in machine learning. 
+<br>Today the dataset is widely used as a typical test case for statistical classification in machine learning.<br> 
 The Iris dataset contains 50 samples of three Iris flower species: Iris setosa, Iris virginica, and Iris versicolor. Each sample has four features measured in centimetres: sepal length and width and petal length and width. Using these four variables, Ronald Fisher developed a linear discriminant model to differentiate between the species.<br>
 (ref: https://en.wikipedia.org/wiki/Iris_flower_data_set )
 <br>
@@ -23,15 +23,16 @@ The program **analysys.py** can be found and executed from the root directory.
 2. Summary of each variable
 3. Display and save a histogram of each varaible
 4. Display a scatter plot of each pair of variables
-5. Correlation - Heatmap
-6. ---+++ continue----+++
+5. Conditional means
+6. Correlation - Heatmap
+7. Boxplot
+8. Classifier routine
 
 The relevant *Program menu* will be noted under the title of each section of the analyis.
 Output from the program is saved in the root folder. Filenames will be noted at the relevant sections as well.
 
 ### Modules used for this project
 
-+ **numpy** - is a library for adding support for large, multi-dimensional arrays along with a large collection of high-level mathematical functions to operate on these arrays (ref: https://en.wikipedia.org/wiki/NumPy)
 + **pandas** - for data manipulation and analysis (ref: https://en.wikipedia.org/wiki/Pandas_(software))
 + **matplotlib** - for creating graphical representation of data (ref: https://en.wikipedia.org/wiki/Matplotlib)
 + **seaborn** - also for graphical data representation with extended finctionality and styling options (ref: https://en.wikipedia.org/wiki/Matplotlib)
@@ -181,7 +182,7 @@ This indicates that the larger petals retain their proportions as they grow in s
 Sepal width has a weak negative correlation with petal length and petal width. This suggests that the sepals may become slightly narrower as the petals grow in size. 
 
 ### Petal Lenght and width measuement distribution among the species - Box plot
-#### (Program menu: 6.) - Plot saved in **heatmap.png**, petal measurement minimum and maximum data output to the terminal
+#### (Program menu: 7.) - Plot saved in **boxplot.png**, petal measurement tresholds ranges for each species output to the terminal
 
 A boxplot (or box and whisker plot) is the visualisation of data distribution based on five attributes; minimum, first quartile, median, third quartile and maximum. (ref: https://builtin.com/data-science/boxplot) The box represents the central 50% of the data with a line representing the median value, while the whiskers cover the remaining range of the data. Outliers are plotted outside the whiskers range as individual points. ˙ref: https://chartio.com/learn/charts/box-plot-complete-guide/)
 As previous visualisations demonstrated, petal measurements are the most useful to distinguish the species therefore the box plot only focuses on petal lenght and width divided into two subplot arranged vertically. The three species are plotted on the same subplot for easier comparison. 
@@ -189,7 +190,34 @@ Once again, Iris-setosa shown completely separately on both subplots, just as it
 However, unlike the scatter plot that was very informative with regards to individual datapoints, the box plot provides a comprehensive picture of the data distribution, showing the median, typical values, and outliers.
 Typical values or the central 50% of the datapoints show distinction between versicolor and virginica although 
 
-Since the petal length data gives a wider range of values in different data points than the petal width data, it is more suitable to focus on the petal lengths.
+Since the petal length data gives a wider range of values than the petal width data, it is more suitable to focus on the petal lengths for classification purposes.
+
+### Summary and proposed practical use of findings
+#### (Program menu: 8. Classifier routine - please try it, it's wonderful!) Classification result output to terminal also a visualisation saved as **classification.png**
+
+This project analysed Fisher's Iris dataset, originally published in 1936 describing 3 species of the Iris flower.
+The data was downloaded and converted into a dataframe and after an initial "health-check" it was analysed using python's pandas library. Matplotlib and seaborn libraries were used for visualisation of the data.
+The summary of each variable has not revealed anything useful although in retrospect petal lenght already noticeable with the highest standard deviation figure indicating the widest variation of values. Grouping the data per species ultimately was used in the classification proces but without graphical illustration it was difficult make sense of the data.
+First visualisation was a histogram for each measurement. It revealed that petal measurements produce bi- and multimodal histograms suggesting possible grouping within the data especially on the lower range of values.
+The pairplot produced from the data creating a grid of scatterplots and histograms for each pair of measurements with a colourcode for each species was much more revelative. Petal measurements for Iris-setosa very clearly stand apart while the other two species show some overlap. A general correlation between petal length and width was also revealed.
+In further analysis a combnination plot was created to display conditional means along with the individual datapoints however this plot did not bring any furter insight other than reinforcing the separation of Iris-setosa samples.
+For the next plot a correlation analysis was carried out and the resulting heatmap plot revealed that the petals keep their proportions as they get bigger since lenght and width and it is also indicated that flowers with larger petals are likely to have longer sepals.
+As previously the sepal data proven to be ambiguous, the last visualisation focused on petal measurements only.
+The two boxplots revealed the typical measurements for each species along with the minimum and maximum measurements and the outliers. 
+
+#### Findings:
+
+Only one of the three Iris species, Iris-setosa can be clearly separated.
+A typical Iris-setosa petal lenght is between 1.4-1.58cm, Iris-versicolor is between 4.0-4.6cm and Iris-virginica petal lenght is between 5.1-5.88cm. Tha latter two overlaps; the larger versicolors and the smaller virgincas may share similar petal measurements. 
+Across the three species the petals keep their proportions regardless of overall size, while the sepals grow in lenght only with the bigger petals.
+
+#### Practical use of the data:
+If we were to identify species in future samples without counting chromosomes we can use the min and max measurements of petal dimensions for each species to separate them and leave only the overlapping ones for chromosome counting.
+Based on petal measurements grouped by species and classifier routin was created (Program menu: 8. Classifier routine)
+Since petal lenghts have a much wider variety it is the basis of the program.
+The user can enter the petal length of a new sample as a floating point number, and receive the name of the species that the sample likely belongs to, based on whether the petal length falls within the range of the minimum and maximum values of that species. If it falls into an overlapping range, both relevant species are listesd.
+The program is complete with a plot that displays the ranges of each species with a box plot and the position of the new sample data.
+
 
 
 
