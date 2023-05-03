@@ -46,7 +46,7 @@ irises = df['species'].unique() # store species for later use in filtering
 def UserMenu():
     while UserMenu != None: #loop until match in list
         menu=[ #menu item structure: ,menu text, expected value from user, function to run stored as text
-            {"menuTxt":"1. Datavalidation", "menuVal":"1", "function": "fn_datavalidation()"},
+            {"menuTxt":"1. Data validation", "menuVal":"1", "function": "fn_datavalidation()"},
             {"menuTxt":"2. Summary of each variable" , "menuVal":"2", "function": "fn_textsummary()"},
             {"menuTxt":"3. Display and save a histogram of each varaible", "menuVal":"3", "function": "fn_makehists()"},
             {"menuTxt":"4. Display a scatter plot of each pair of variables", "menuVal": "4", "function": "fn_pairplot()"},
@@ -68,7 +68,7 @@ def UserMenu():
                 return(m["function"]) #return function to run with exec(Usermenu(function)
         # if there is no match we stay in the while loop until there is one
 
-# -----user interaction: Return to menu?
+# -----user interaction inside function: Return to menu?
 
 def fn_continiue():
     userinput=input("Do you want to quit? (Q) or Back to the Menu? (M)")

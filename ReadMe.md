@@ -19,7 +19,7 @@ The program **analysys.py** can be found and executed from the root directory.
 
 - The main functions of the program can be accessed from the main menu:
 
-1. Datavalidation
+1. Data validation
 2. Summary of each variable
 3. Display and save a histogram of each varaible
 4. Display a scatter plot of each pair of variables
@@ -36,7 +36,7 @@ Output from the program is saved in the root folder. Filenames will be noted at 
 + **matplotlib** - for creating graphical representation of data (ref: https://en.wikipedia.org/wiki/Matplotlib)
 + **seaborn** - also for graphical data representation with extended finctionality and styling options (ref: https://en.wikipedia.org/wiki/Matplotlib)
 
-### Datasource:
+### Data source:
 
 Source files downloaded from https://archive.ics.uci.edu/ml/datasets/iris 
 The source file **iris.data** is in a comma-separated value file format without headers, **iris.names** is a brief description of the dataset which contains information regarding the headers for the data. 
@@ -49,7 +49,7 @@ Iris flower measurement values are imported from **iris.data**, header lables ad
 ### Data validation and structure 
 #### (Program menu: 1.)
 
-The resulting dataframe is checked for anomalies such as missing or Null entries or unsuitable data formats and a general information on its struture<br>
+The resulting dataframe is checked for anomalies such as missing or Null entries or unsuitable data formats and a general information on its structure<br>
 
 + #### **Dataframe info:**
 
@@ -91,7 +91,7 @@ Memory usage: 6.0+ KB
 It appears that the dataframe contains 150 value entries per column, 4 columns contain floating point numbers and one contains text data and there is an added index column that is assigned by pandas automatically when creating the dataframe. (Automatic indexing ref: https://blog.hubspot.com/website/pandas-indexing)
 In the subsequent check "Checking for Null entries", it was found that there are no Null entries in the dataframe. <br> Null entries can cause unexpected results with calculations, comparison of data and pandas functions. (Dealing with Null values ref: https://medium.com/geekculture/dealing-with-null-values-in-pandas-dataframe-1a67854fe834)
 
-+ #### **Snapshot wiew of the created Dataframe**
++ #### **Snapshot view of the created Dataframe**
 
 <br>
 
@@ -106,7 +106,7 @@ In the subsequent check "Checking for Null entries", it was found that there are
 <br>
 
 Output shows that the added headers make logical sense, floating point numbers are under flower measurements and species names are under species.<br>
-The dataframe apperas to be ready for further analyis.
+The dataframe appears to be ready for further analysis.
 
 <br>
 
@@ -138,16 +138,16 @@ Initial summary reveals that there are 150 values for each measurement which mak
 A histogram is a plot that shows frequency distribution (shape) of a set of values. A histogram in the context of the Iris dataset can visualise the distribution of the various measurement values of the dimensions of the petals and sepals of the Iris flower. (ref: https://statistics.laerd.com/statistical-guides/understanding-histograms.php) <br>
 Key characteristics of histograms are *peaks* and *spread* that represent the most typical values and how much the data variates, *skewed data* or presence of *outliers* may indicate patterns that could be investigated or errors in the sample.
 (ref: https://chartio.com/learn/charts/histogram-complete-guide/)
-+ **Histogram of sepal lenghts (cm)**
-    The histogram is quite widely spread, slightly skewed to the left towards the smaller values which indicates that sepals with shorter than the median lenght are more common than long ones. The data shows three distinct peaks indicating sepal lenghts around 5.5cm to be the most common but peaks of sample lengths just under 5cm and between 6.0 and 6.5cm are frequent as well.
++ **Histogram of sepal lengths (cm)**
+    The histogram is quite widely spread, slightly skewed to the left towards the smaller values which indicates that sepals with less than the median length are more common than long ones. The data shows three distinct peaks indicating sepal lengths around 5.5cm to be the most common but peaks of sample lengths just under 5cm and between 6.0 and 6.5cm are a frequent occurrence as well.
 + **Histogram of sepal width (cm)**
-    This histogram is almost symmetric indicating close to normal distribution and has a narrow spread which is not surprising as standard deviation is the smallest in this cathegory at 0.433594. 
+    This histogram is almost symmetric indicating close to normal distribution and has a narrow spread which is not surprising as standard deviation is the smallest in this category at 0.433594. 
 + **Histogram of petal length (cm)**
     This is a bimodal histogram with two distinct peaks or modes, one at the extreme left indicating a large number of samples with short petals while the other peak is at 4-5cm with a wider base with an almost normal distribution shape. Multimodal histograms could indicate subgroups in the dataset.
 + **Histogram of petal width (cm)**
     This a multimodal histogram although similarly to the previous histogram, there is a distinct cluster at the extreme left showing a significant number of samples with narrow petals, the remaining samples are gathering in an almost separate multimodal shape with multiple peaks.
 
-Since the data is not separated by species the resulting histograms are more suitable to identify outliers and errors but it is worth notig that both histograms representing petal measurements (see: *petal length (cm).png* and *petal width (cm).png*) show a distinct cluster of samples with short and/or narrow petals. 
+Since the data is not separated by species the resulting histograms are more suitable to identify outliers and errors but it is worth noting that both histograms representing petal measurements (see: *petal length (cm).png* and *petal width (cm).png*) show a distinct cluster of samples with short and/or narrow petals. 
 
 ## Project task 3. Output a scatter plot of each pair of variables
 #### (Program menu: 4.) - Output saved in **pairplot.png** and **sepal_petal.png**
@@ -166,30 +166,30 @@ Scatter plots can also indicate correlation between pairs of variables as demons
 #### (Program menu: 5.) - Output saved in **condmeans.png**
 
 The "Conditional Means" (condmeans.png) plot is a direct reutilisation of a sample plot from the seaborn plot gallery. 
-It is combining a strip plot for each of the flower measurement values and point plot for each of the means figures for each of the values grouped by species. The chart indicates the distinction of Iris-setosa values once agin but it doesn't reveal additional information about the data, certainly can't assist with the distinction of the other two species. 
+It is combining a strip plot for each of the flower measurement values and point plot for each of the means figures for each of the values grouped by species. The chart indicates the distinction of Iris-setosa values once again but it doesn't reveal additional information about the data, certainly can't assist with the distinction of the other two species. 
 
 ### Correlation - Heatmap
 #### (Program menu: 6.) - Output saved in **heatmap.png**
 
 Correlation between the different columns of the data can be calculated using pandas .corr() function which using the Pearson method as default. (ref: https://zion-oladiran.medium.com/exploratory-data-analysis-iris-dataset-68897497b120)  
 The Pearson correlation coefficient, that falls between -1 and 1, measures linear correlation. A coefficient of 1 indicates positive correlation, while a coefficient of -1 indicates negative correlation. A coefficient of 0 means that the two variables likely have no effect on each other. (ref: https://www.scribbr.com/statistics/pearson-correlation-coefficient/#:~:text=The%20Pearson%20correlation%20coefficient%20(r,the%20relationship%20between%20two%20variables.) 
-The resulting correlation matrix is displayed in terminal output however, a graphical representation of the matrix would help recognisding relevant patterns in the data.
-A heatmap is a two-dimensional data-representation in which values are represented by colors to show relationships between two variables, one plotted on each axis. (ref: vhttps://chartio.com/learn/charts/heatmap-complete-guide/)
-Such plot can be used for the representation of a correlation matrix, showing the relationships between pairs of variables as a grid of colored squares. Each square's color represents the value of the correlation coefficient.
+The resulting correlation matrix is displayed in terminal output however, a graphical representation of the matrix would help recognising relevant patterns in the data.
+A heatmap is a two-dimensional data-representation in which values are represented by colours to show relationships between two variables, one plotted on each axis. (ref: vhttps://chartio.com/learn/charts/heatmap-complete-guide/)
+Such plot can be used for the representation of a correlation matrix, showing the relationships between pairs of variables as a grid of colored squares. Each square's colour represents the value of the correlation coefficient.
 Using seaborn .heatmap plot function the resulting heatmap reveals that there is a strong positive correlation (0.96) between petal length and petal width, as well as between sepal length and petal length and width (0.87 and 0.82). 
-This indicates that the larger petals retain their proportions as they grow in size as the wider they are their lenght increases. Also that a flower with a longer sepal will likely have a larger petal. 
+This indicates that the larger petals retain their proportions as they grow in size since the wider they are their length increases. Also revealed that a flower with a longer sepal will likely have a larger petal. 
 Sepal width has a weak negative correlation with petal length and petal width. This suggests that the sepals may become slightly narrower as the petals grow in size. 
 
 ### Petal Lenght and width measuement distribution among the species - Box plot
 #### (Program menu: 6.) - Plot saved in **heatmap.png**, petal measurement minimum and maximum data output to the terminal
 
-A boxplot (or box and whisker plot) is the visualisation of data distribution based on five attributes; minimum, first quartile, median, third quartile and maximum. (ref: https://builtin.com/data-science/boxplot) The box represents the central 50% of the data with a line representing the median value, while the whiskers cover the remaining range of the data. Outliers are plotted outside the whsikers range as individual points. ˙ref: https://chartio.com/learn/charts/box-plot-complete-guide/)
-As previous visualisations demonstrated, petal measurements are the most usefull to distinguish the species therefore the box plot only focuses on petal lenght and width divided into two subplot arranged vertically. The three species are plotted on the same subplot for easier copmparison. 
+A boxplot (or box and whisker plot) is the visualisation of data distribution based on five attributes; minimum, first quartile, median, third quartile and maximum. (ref: https://builtin.com/data-science/boxplot) The box represents the central 50% of the data with a line representing the median value, while the whiskers cover the remaining range of the data. Outliers are plotted outside the whiskers range as individual points. ˙ref: https://chartio.com/learn/charts/box-plot-complete-guide/)
+As previous visualisations demonstrated, petal measurements are the most useful to distinguish the species therefore the box plot only focuses on petal lenght and width divided into two subplot arranged vertically. The three species are plotted on the same subplot for easier comparison. 
 Once again, Iris-setosa shown completely separately on both subplots, just as it did in the scatter plots. The other two species also demonstrate the same overlap as before.
 However, unlike the scatter plot that was very informative with regards to individual datapoints, the box plot provides a comprehensive picture of the data distribution, showing the median, typical values, and outliers.
 Typical values or the central 50% of the datapoints show distinction between versicolor and virginica although 
 
-Since the petal length data gives a wider range of values in different data points than the petal width data, it is more suitable to focus on the petal lenghts.
+Since the petal length data gives a wider range of values in different data points than the petal width data, it is more suitable to focus on the petal lengths.
 
 
 
