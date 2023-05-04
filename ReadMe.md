@@ -193,7 +193,7 @@ Typical values or the central 50% of the datapoints show distinction between ver
 Since the petal length data gives a wider range of values than the petal width data, it is more suitable to focus on the petal lengths for classification purposes.
 
 ### Summary and proposed practical use of findings
-#### (Program menu: 8. Classifier routine - please try it, it's wonderful!) Classification result output to terminal also a visualisation saved as **classification.png**
+#### (Program menu: 8. Classifier routine) Classification result output to terminal also a visualisation saved as **classification.png**
 
 This project analysed Fisher's Iris dataset, originally published in 1936 describing 3 species of the Iris flower.
 The data was downloaded and converted into a dataframe and after an initial "health-check" it was analysed using python's pandas library. Matplotlib and seaborn libraries were used for visualisation of the data.
@@ -207,12 +207,18 @@ The two boxplots revealed the typical measurements for each species along with t
 
 #### Findings:
 
-Only one of the three Iris species, Iris-setosa can be clearly separated.
-A typical Iris-setosa petal lenght is between 1.4-1.58cm, Iris-versicolor is between 4.0-4.6cm and Iris-virginica petal lenght is between 5.1-5.88cm. Tha latter two overlaps; the larger versicolors and the smaller virgincas may share similar petal measurements. 
-Across the three species the petals keep their proportions regardless of overall size, while the sepals grow in lenght only with the bigger petals.
++ Only one of the three Iris species; Iris-setosa can be clearly separated based on the minimum and maximum size of petals.
++ While the other two species have overlapping data for petal dimansions, the analysis was able to establish a range for typical petal lengths and widths for the three species and visualised on a box plot: 
+  + Iris-setosa typical petal lenght is between 1.4-1.58cm, 
+  + Iris-versicolor is between 4.0-4.6cm and 
+  + Iris-virginica petal lenght is between 5.1-5.88cm. 
++ A strong correlation demonstrated on scatterplots and heatmap visualiation between petal widths and legths indicate that across the three species the petals keep their proportions regardless of overall size.
++ A correlation demonstrated on a heatmap plot suggests that iris flowers with bigger petals likely to heve longer sepals.
 
 #### Practical use of the data:
-If we were to identify species in future samples without counting chromosomes we can use the min and max measurements of petal dimensions for each species to separate them and leave only the overlapping ones for chromosome counting.
+##### (Program menu: 8. Classifier routine)
+
+If we were to identify species in future samples of Iris flowers without counting chromosomes we can use the min and max measurements of petal dimensions for each species to separate them and leave only the overlapping ones for chromosome counting.
 Based on petal measurements grouped by species and classifier routin was created (Program menu: 8. Classifier routine)
 Since petal lenghts have a much wider variety it is the basis of the program.
 The user can enter the petal length of a new sample as a floating point number, and receive the name of the species that the sample likely belongs to, based on whether the petal length falls within the range of the minimum and maximum values of that species. If it falls into an overlapping range, both relevant species are listesd.
