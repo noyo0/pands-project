@@ -16,6 +16,8 @@
 # RA Fisher's original paper: https://digital.library.adelaide.edu.au/dspace/bitstream/2440/15227/1/138.pdf
 # >>> Further references on individual problems are noted in the ReadMe.md file.
 
+
+
 # ------------- load modules  --------------
 #import numpy as np # for mathematicalfunctions
 import pandas as pd # for data analysis
@@ -197,38 +199,10 @@ def fn_heatmap():
     plt.show()
     print("\n Plot saved as <heatmap.png>")
 
-
-# -------------conditional means
+# -------------conditional means from external file
 def fn_condmeans():
-    # seaborn galery ref: https://seaborn.pydata.org/examples/jitter_stripplot.html
-    sns.set_theme(style="darkgrid", font='serif') # set style
-    # "Melt" the dataset to "long-form" or "tidy" representation
-    iris = pd.melt(df, "species", var_name="measurements") # this will put all measurements into one column
-    # Initialize the figure
-    f, ax = plt.subplots()
-    sns.despine(bottom=True, left=True)
-    # Show each observation with a scatterplot
-    sns.stripplot( 
-        data=iris, x="value", y="measurements", palette="Set1",
-        dodge=True, alpha=.25, zorder=1
-    )
-    # Show the conditional means, aligning each pointplot in the
-    # center of the strips by adjusting the width allotted to each
-    # category (.8 by default) by the number of hue levels
-    sns.pointplot(
-        data=iris, x="value", y="measurements", hue="species",
-        join=False, dodge=.8 - .8 / 3, palette="dark",
-        markers="d", scale=.75, errorbar=None
-    )
-    plt.subplots_adjust(top=0.95,left=0.3) # adjusting plot to fit title and labels
-    ax.set_title("Conditional Means") # set title
-    # Improve the legend
-    sns.move_legend(
-        ax, loc="upper left", ncol=1, frameon=True, columnspacing=1, handletextpad=0
-    )    
-    plt.savefig("condmeans.png")
-    plt.show()
-    print("\n Plot saved as <condmeans.png>")
+    from condmeans import fn_condmeansext # importing a function from other file
+    fn_condmeansext() # run the function
 
 # ------------------box plot
 def fn_boxplot():
