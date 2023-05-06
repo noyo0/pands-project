@@ -1,4 +1,4 @@
-# analysis.py.py
+# analysis.py
 # Author: Norbert Antal
 
 ## Program functions:  
@@ -15,7 +15,7 @@
 # matplotlib tutorial ref: https://www.youtube.com/watch?v=DAQNHzOcO5A
 # matplotlib with pandas ref: https://www.youtube.com/watch?v=0P7QnIQDBJY
 # RA Fisher's original paper: https://digital.library.adelaide.edu.au/dspace/bitstream/2440/15227/1/138.pdf
-# >>> Further references on individual problems are noted in the ReadMe.md file.
+# >>> Further references on individual problems are in line with the code or noted in the ReadMe.md file.
 
 # ------------- load modules  --------------
 import pandas as pd # for data analysis and dataframe
@@ -24,9 +24,9 @@ import seaborn as sns # for creating graphical representation of data
 import os # for the clear screen function
 
 #----read in data and give headers to each column, creating a dataframe-----------------------
-SOURCEDATA="iris.data" # store path of source file in global variable (file is in the same folder so ony file name here)
+SOURCEDATA="iris.data" # store path of source file in global variable (file is in the same folder so only file name here)
 #----read in data and add headers to each column-----------------------
-headers=[ ##adding headers to dataframe (later reused as global variable for filtering) (headers taken from iris.names)
+headers=[ #adding headers to dataframe (later reused as global variable for filtering) (headers taken from iris.names)
     "sepal length (cm)", 
     "sepal width (cm)", 
     "petal length (cm)", 
@@ -36,9 +36,7 @@ df=pd.read_csv(SOURCEDATA, names=headers) # creating dataframe
 
 irises = df['species'].unique() # store species globally for later use in filtering 
 
-# --------User interaction - Menu ref: Week06 Practice
-
-# error handling with "while" ref: https://programming-21.mooc.fi/part-6/3-errors
+# --------User interaction - Menu ref: Week06 Practice - Studentmanagement.py
 # return keyword ref: https://www.w3schools.com/python/ref_keyword_return.asp
 # execute function stored as string ref: https://www.geeksforgeeks.org/exec-in-python/
 # get list index numbers ref: https://towardsdatascience.com/looping-in-python-5289a99a116e#:~:text=Using%20the%20enumerate()%20Function&text=The%20enumerate()%20function%20takes,(the%20default%20is%200).&text=And%20that's%20it!
@@ -47,8 +45,8 @@ irises = df['species'].unique() # store species globally for later use in filter
 def UserMenu():
     os.system('clear') # clear screen for better readability ref: https://www.geeksforgeeks.org/clear-screen-python/
     print('''
-Welcome to Iris data analysis companion suite - 2023
-Author: Norbert Antal
+Welcome to Iris data analysis companion suite :)
+Author: Norbert Antal - 2023
     ''')
     while UserMenu != None: #loop until user entry has match in list
         menu=[ #menu item structure: menu text, expected value from user, function to run stored as text
@@ -65,7 +63,7 @@ Author: Norbert Antal
             {"menuTxt":"","menuVal": "", "function": "exit()"}
             ]   
         print("\n USER MENU:\n") #user interaction, indicate expected entry
-        for m in menu: #display menu items by iterating through menu list items
+        for m in menu: #display menu items by iterating through menu list
             print(m["menuTxt"]) # and print each      
         UserSelect=input("\n Please select menu number 1-8 (or Q to quit):")# userinteraction - asking for input and store same in "UserSelect"
         for m in menu: # iterate through menu items to find match
@@ -73,7 +71,8 @@ Author: Norbert Antal
                 os.system('clear') # clear screen for better readability ref: https://www.geeksforgeeks.org/clear-screen-python/
                 print("\n✓ ",m["menuTxt"]) #user feedback - confirm selection
                 return(m["function"]) #return selected function as text to run with exec(Usermenu())
-        # if there is no match profgram stays in the while loop until there is one (hence the variations that will return exit() command)
+        # if there is no match, the function stays in the while loop until there is one 
+        # hence the variations that will return the exit() command to prevent user getting stuck 
 
 # -----user interaction after function finished: Return to menu or quit?
 def fn_continue():
@@ -82,11 +81,12 @@ def fn_continue():
         exec(UserMenu()) #exec will run whatever function is returned as string to UserMenu()
     else:
         exec(exit()) # exit program if user enters anything but M or m
+#-------------------------end of function
 
 # 1.---- Data Validation -------------
-
+# commands to check for anomalies and to show the created dataframe structure
 # ref: https://www.tutorialspoint.com/exploratory-data-analysis-on-iris-dataset
-def fn_datavalidation(): #all explained in the titles
+def fn_datavalidation(): 
     print("\n-------> dataframe structure: \n")
     print(df.head()) # first 5 lines of data
     print("\n-------> dataframe info: \n")
@@ -94,11 +94,10 @@ def fn_datavalidation(): #all explained in the titles
     print("\n-------> Checking for Null entries: \n")
     print(df.isnull().sum()) #outputs the number of null entries in the dataframe
     print("\n")
-    # return to menu or quit
-    fn_continue()
+    fn_continue()# return to menu or quit
+#-------------------------end of function
 
 # 2.---- create summary of each variable and output to summary.txt-------------
-
 def fn_textsummary(): 
     #describe ref: (https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.describe.html)
     #output to string ref: https://stackoverflow.com/questions/31247198/python-pandas-write-content-of-dataframe-into-text-file
@@ -106,19 +105,22 @@ def fn_textsummary():
     print(f"THE SUMMARY OF EACH VARIABLE IN THE IRIS DATASHEET:\n\n{df.describe().to_string()}")
     print(f"\n\n\nTHE SUMMARY OF EACH VARIABLE BY SPECIES IN THE IRIS DATASHEET:\n")
     for i in irises:
+        #lookup/conditional filtering ref: https://www.kdnuggets.com/2022/12/five-ways-conditional-filtering-pandas.html
+        # anatomy: dataframe.LOC[dataframe[lookuparray] == lookupvalue][returnarray].function() or functions
         print(f"\n\t\t\t\t\t{i}\n\n{df.loc[df['species']==i][headers[0:4]].describe().to_string()}\n") 
-        #conditional filtering ref: https://www.kdnuggets.com/2022/12/five-ways-conditional-filtering-pandas.html
-    print("\nOutput also saved in summary.txt\n")
-    with open('summary.txt','w') as f:
+    print("\nOutput also saved in summary.txt\n") # tell user where to find output file
+    with open('summary.txt','w') as f: #write formatted summaries to file
         f.write(f"THE SUMMARY OF EACH VARIABLE IN THE IRIS DATASHEET:\n\n{df.describe().to_string()}")
         f.write(f"\n\n\nTHE SUMMARY OF EACH VARIABLE BY SPECIES IN THE IRIS DATASHEET:\n")
-        for i in irises:
+        for i in irises:# write formatted summaries for each species using lookup/conditional filtering
             f.write(f"\n\t\t\t\t\t{i}\n\n{df.loc[df['species']==i][headers[0:4]].describe().to_string()}\n")
-    fn_continue() #return to menu?
+    fn_continue() # return to menu or quit
+#-------------------------end of function
 
 # 3.------- Create histogram of each variable and save results in png files 
-
-def fn_pnghist(column): #part of histogram sequence - draws one histogram with column name stored in column argument
+    
+    # 3A. ------First set up histogram template
+def fn_pnghist(column): # part of histogram sequence - draws one histogram with column name stored in column argument
     # ref: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.hist.html
     # ref: https://www.geeksforgeeks.org/how-to-set-plot-background-color-in-matplotlib/
     # ref: https://matplotlib.org/stable/tutorials/introductory/customizing.html
@@ -129,30 +131,35 @@ def fn_pnghist(column): #part of histogram sequence - draws one histogram with c
     plt.savefig(f"{column}.png") # save plot ref: https://chartio.com/resources/tutorials/how-to-save-a-plot-to-a-file-using-matplotlib/
     plt.show() # turns out plt.show() must be left in the end of the function to avoide having all histograms on one plot 💁
     print(f"\nPlot saved as <{column}.png>\n") # user feedback - display filename so user knows what to look for
-
-# 3.------ create a for loop to cycle through the variables in iris data,
-    # and call the 'fn_pnghist' function to draw the histograms with each variable as per their column label
+#-------------------------end of function
+    
+    # 3B. ------Iterate template through each measurement column;
+        # by calling the 'fn_pnghist' function to draw the histograms with each variable as per their column label
 def fn_makehists():
     cols=headers[:-1] # created shorter list from 'headers' to avoid including the 'species column' that is not one of the measurements short list stored in 'cols'
     for c in cols: # loop through list and store header names
         fn_pnghist(c)
-    fn_continue() # return to menu function
+    fn_continue() # return to menu or quit
+#-------------------------end of function
+#--------------------end of segment 3.
 
 # 4.------ Display a scatter plot of each pair of variables
-def fn_pairplot():
-    plt.style.use('fast')
-    sns.pairplot(df, hue="species")  #ref: https://seaborn.pydata.org/generated/seaborn.pairplot.html
-    specfont1 = {"family":"serif","color":"#4a6741",'weight':'bold',"size":14}
+    # 4A.------Pair plot for each pair of measurements
+def fn_pairplot(): #pairplot ref: https://www.youtube.com/watch?v=b7JuBsswDlo&t=45s
+    plt.style.use('fast') # set style
+    sns.pairplot(df, hue="species")  # create pairplot ref: https://seaborn.pydata.org/generated/seaborn.pairplot.html
+    specfont1 = {"family":"serif","color":"#4a6741",'weight':'bold',"size":14} # set font style
     plt.suptitle("Pair plot of measurements in the Iris dataset", fontdict=specfont1) # set title
     plt.subplots_adjust(top=0.95) # reducing size of the plot to make more room for the title.
     #------output to -png
     plt.savefig(f"pairplot.png")
     plt.show(block = False)
     plt.pause(7) #plot only showed in jupyter, workaround ref: https://pythonguides.com/matplotlib-not-showing-plot/
-    plt.close('all')
+    plt.close('all') # this is not ideal but program stucks otherwise
     print("\n Plot saved as <pairplot.png>\n")
+#-------------------------end of function
 
-# 5.------ Display a scatter plot for sepal and petal measurement pairs separately
+    # 4B.------ Display a scatter plot for sepal and petal measurement pairs separately
 def fn_sepal_petal():
     #-----Set plot style 
     plt.style.use('fast') #ref: https://matplotlib.org/stable/gallery/style_sheets/index.html
@@ -179,12 +186,15 @@ def fn_sepal_petal():
     plt.savefig(f"sepal_petal.png")
     plt.show()
     print("\n Plot saved as <sepal_petal.png>\n")
+#-------------------------end of function
 
-# ------- display and save both versions of the scatter plots
+    # 4C.------- display and save both versions of the scatter plots
 def fn_scatters():
-    fn_sepal_petal()
-    fn_pairplot()
+    fn_sepal_petal()# run sepal and petal scatterplots first
+    fn_pairplot() # then pairplot
     fn_continue() # return to menu function
+#-------------------------end of function
+#--------------------end of segment 4.
 
 # ------- Correlation Heatmap
 def fn_heatmap():
@@ -199,6 +209,7 @@ def fn_heatmap():
     plt.suptitle("Correlation - Heatmap", fontdict={"family":"serif","color":"#4a6741",'weight':'bold',"size":12})
     # heatmap
     sns.heatmap(correlation, annot=True, cmap='Greens')
+    plt.tight_layout()
     # save to file
     plt.savefig("heatmap.png")
     plt.show()
@@ -227,6 +238,7 @@ def fn_boxplot():
     pL = headers[2] #"petal length (cm)"
     pW = headers[3] #"petal width (cm)"
     fig, axs = plt.subplots(2, 1, figsize=(10, 5), facecolor='white') # plotting 2 subplots on top of each other, classic with white background
+
     for i in irises: # iterating through species
         petal_lengths = df.loc[df['species'] == i][pL] #filter to petal lenghts per species
         petal_widths = df.loc[df['species'] == i][pW] #filter to petal widths per species
@@ -238,6 +250,7 @@ def fn_boxplot():
         axs[0].set_xlabel(pL,size='smaller') # # set axis lable from variables
         axs[0].set_xlim(0,7) # Aligning the two axes to make comparison easier
         axs[0].text(med_petal_lengths,0.75,f'{i}', color='grey', size='small', ha='center') # set, position and style labels
+        
         # bottom plot
         axs[1].boxplot(x=petal_widths, vert=False)
         axs[1].set_title(f"{pW} by Species")
@@ -260,6 +273,13 @@ def fn_continue_classifier():
         exec(UserMenu()) # exit program if user enters anything but M or m
 
 from classifier import fn_classify
+# The functions for the classifier routine were saved as a separate file and loaded byck into analysis.py to test if it reduces loading time
+    # online references were inconclusive:
+        # Partitioning improves performance ref: https://gamedev.stackexchange.com/questions/203710/does-having-code-spread-in-multiple-files-decrease-performance
+        # Partitioning has little effect ref: https://stackoverflow.com/questions/1083105/does-creating-separate-functions-instead-of-one-big-one-slow-processing-time
+# It was found that there was no significant change in loading time for analysis.py by partitioning classifier.py (also condmeans.py) to separate files
+    # Perhaps the overall amount of code is so little that partitioning has no menaingfull effect.
+
 def fn_classifier(): # saving function in separate file <classifier.py> to reduce loading time (it made very little difference 😞)
         #function descritpion for user
     os.system('clear')

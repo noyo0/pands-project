@@ -17,9 +17,10 @@ headers=[
     "species"]
 df=pd.read_csv(SOURCEDATA, names=headers) 
 
-# ----------------------the actual function:
+# ----------------------condmeansext function:
+# creates a conditional means plot 
+# the code is lifted from seaborn galery ref: https://seaborn.pydata.org/examples/jitter_stripplot.html
 def fn_condmeansext():
-    # seaborn galery ref: https://seaborn.pydata.org/examples/jitter_stripplot.html
     sns.set_theme(style="darkgrid", font='serif') # set style
     # "Melt" the dataset to "long-form" or "tidy" representation
     iris = pd.melt(df, "species", var_name="measurements") # this will put all measurements into one column
@@ -45,8 +46,8 @@ def fn_condmeansext():
     sns.move_legend(
         ax, loc="upper left", ncol=1, frameon=True, columnspacing=1, handletextpad=0
     )    
-    plt.savefig("condmeans.png")
+    plt.savefig("condmeans.png") # save plot as png
     plt.show()
-    print("\n Plot saved as <condmeans.png>")
+    print("\n Plot saved as <condmeans.png>") #inform user what the file name is.
 
-# end of guest function
+# end of function

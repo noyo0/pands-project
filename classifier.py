@@ -2,6 +2,13 @@
 # Author: Norbert Antal
 # Classify iris species based on user defined sample petal length values.
 
+# The functions for the classifier routine were saved as a separate file and loaded byck into analysis.py to test if it reduces loading time
+    # online references were inconclusive:
+        # Partitioning improves performance ref: https://gamedev.stackexchange.com/questions/203710/does-having-code-spread-in-multiple-files-decrease-performance
+        # Partitioning has little effect ref: https://stackoverflow.com/questions/1083105/does-creating-separate-functions-instead-of-one-big-one-slow-processing-time
+# It was found that there was no significant change in loading time for analysis.py by partitioning classifier.py (also condmeans.py) to separate files
+    # Perhaps the overall amount of code is so little that partitioning has no menaingfull effect.
+
 # ------------- load modules  --------------
 import pandas as pd # for dataframe and analysis
 import matplotlib.pyplot as plt # for creating boxplot
@@ -59,13 +66,19 @@ def fn_classifiervisualiser(a_number,text):
                  f' ←your sample: ({a_number}cm)\n      {text}',
                  color='white',bbox=dict(facecolor='magenta', alpha=0.175, edgecolor='white', pad=1.5), 
                  size='small') 
+    plt.savefig("ClassificationResult.png")
+    print("Result saved as <ClassificationResult.png>")
     plt.show()
 
 # ------------CLassifier routine ----------------------------------
 # function description displayed when the function called
 def fn_classify():
-    userinput=input(('Please enter the petal length as floating-point number in cm: \n')) #user defines sample size
-    sample=float(userinput) # user entry converted float as Iris data is also float
+    while True: # exception handling ref: https://docs.python.org/3/tutorial/errors.html#handling-exceptions
+        try:
+            sample=float(input(('Please enter the petal length as floating-point number in cm: \n'))) #user defines sample size
+            break
+        except ValueError:
+            print('Error: invalid entry.\n')
     display = "✕" # default value to display
     returnme=[] # result container for species names
     petalmeasurements = []# container for min/max petal length range
@@ -91,7 +104,7 @@ def fn_classify():
     typicalsample = typical.loc[(typical['typicalmin'] <= sample) & (typical['typicalmax'] >= sample)]
     #-classification based on lookup results
     if result.empty: #error handling for out of range samples (ref: https://stackoverflow.com/questions/48558511/create-an-exception-for-empty-dataframe)
-        plotme=0 # block boxplot function as there is nothing to plot - out of range procedure
+        plotme=0 # block boxplot function as there is nothing to plot = out of range procedure
     else: # output if there is a match:
         plotme=1 # unblock boxplot function - within range procedure
         for index, row in result.iterrows(): # iterate for more than one result (ref: https://stackoverflow.com/questions/16476924/how-to-iterate-over-rows-in-a-dataframe-in-pandas)            
@@ -106,13 +119,15 @@ def fn_classify():
             display = f"The sample is ambiguous \n     could be either {verdict}" #format text accordingly
     print(display) # output dynamically formatted text to terminal
     
-    if plotme == 1: # 0 is out of range procedure, 1 is within range procedure
-        fn_classifiervisualiser(sample,display) #run plot with final result and dynamically formatted text if sample is within range
-    else: # user interaction if sample out of range and run classifier function again.
+    if plotme == 1: # 0 = out of range procedure, 1 = within range procedure
+        fn_classifiervisualiser(sample,display) # within range: run plot with final result and dynamically formatted text
+    else: # out of range: user interaction if sample out of range and run classifier function again.
         print('''
                         Sample is out of range
     No matching species in the dataframe for that sample size
         ''')
         print(f"\n \t\tClassification criteria: \n\n",criteria,"\n\n") # remind user of valid range
         print('Please try again:') 
-        fn_classify() # run function from the top
+        fn_classify() 
+
+# End of classifier with visualisation program
