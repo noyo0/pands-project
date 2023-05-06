@@ -6,7 +6,8 @@
 # Outputs a summary of each variable to a single text file,  
 # Saves a histogram of each variable to png files, and  
 # Outputs a scatter plot of each pair of variables.  
-# Performs other appropriate analysis
+# Performs other appropriate analysis (conditional means, heatmap, boxplot)
+# Provides a sample classification routine with visualisation
 
 ## References: 
 # pandas documentation: https://pandas.pydata.org/pandas-docs/stable/
@@ -16,16 +17,13 @@
 # RA Fisher's original paper: https://digital.library.adelaide.edu.au/dspace/bitstream/2440/15227/1/138.pdf
 # >>> Further references on individual problems are noted in the ReadMe.md file.
 
-
-
 # ------------- load modules  --------------
-#import numpy as np # for mathematicalfunctions
 import pandas as pd # for data analysis
 import matplotlib.pyplot as plt # for creating graphical representation of data
-import seaborn as sns # # for creating prettier graphical representation of data
+import seaborn as sns # # for creating graphical representation of data
 
 # ------------- load data and add headers --------------
-SOURCEDATA="iris.data"
+SOURCEDATA="iris.data" # store source file in global variable
 #----read in with giving headers to each column-----------------------
 headers=[ #adding headers to dataframe (later reused as global variable for filtering)
     "sepal length (cm)", 
@@ -35,7 +33,7 @@ headers=[ #adding headers to dataframe (later reused as global variable for filt
     "species"]
 df=pd.read_csv(SOURCEDATA, names=headers) # creating dataframe
 
-irises = df['species'].unique() # store species for later use in filtering
+irises = df['species'].unique() # store species globally for later use in filtering 
 
 # --------User interaction - Menu ref: Week06 Practice
 
@@ -46,8 +44,8 @@ irises = df['species'].unique() # store species for later use in filtering
 # update dictionary ref: https://thispointer.com/python-how-to-add-append-key-value-pairs-in-dictionary-using-dict-update/
 # dictionary from list (zip) ref: https://stackoverflow.com/questions/209840/how-can-i-make-a-dictionary-dict-from-separate-lists-of-keys-and-values
 def UserMenu():
-    while UserMenu != None: #loop until match in list
-        menu=[ #menu item structure: ,menu text, expected value from user, function to run stored as text
+    while UserMenu != None: #loop until user entry has match in list
+        menu=[ #menu item structure: menu text, expected value from user, function to run stored as text
             {"menuTxt":"1. Data validation", "menuVal":"1", "function": "fn_datavalidation()"},
             {"menuTxt":"2. Summary of each variable" , "menuVal":"2", "function": "fn_textsummary()"},
             {"menuTxt":"3. Display and save a histogram of each varaible", "menuVal":"3", "function": "fn_makehists()"},
@@ -60,24 +58,23 @@ def UserMenu():
             {"menuTxt":"","menuVal": "q", "function": "exit()"}, #cheated a little so lower case q and empty entry also quits the program
             {"menuTxt":"","menuVal": "", "function": "exit()"}
             ]   
-        print("\n Please select menu number 1-8 (or Q to quit):\n") #user interaction
+        print("\n Please select menu number 1-8 (Q to quit):\n") #user interaction, indicate expected entry
         for m in menu: #display menu items by iterating through menu list items
-            print(m["menuTxt"])       
-        UserSelect=input("\n Please select menu number 1-8 (or Q to quit):")# userinteraction - asking for input and store same
+            print(m["menuTxt"]) # and print each      
+        UserSelect=input("\n Please select menu number 1-8 (or Q to quit):")# userinteraction - asking for input and store same in "UserSelect"
         for m in menu: # iterate through menu items to find match
-            if UserSelect==m["menuVal"]: #if there is match:     
-                print("\nYou selected",m["menuTxt"]) #user feedback
-                return(m["function"]) #return function to run with exec(Usermenu(function)
-        # if there is no match we stay in the while loop until there is one
+            if UserSelect==m["menuVal"]: #if "UserSelect" matches "menu" list item:
+                print("\n✓ ",m["menuTxt"]) #user feedback - confirm selection
+                return(m["function"]) #return selected function as text to run with exec(Usermenu())
+        # if there is no match profgram stays in the while loop until there is one (hence the variations that will return exit() command)
 
-# -----user interaction inside function: Return to menu?
-
-def fn_continiue():
-    userinput=input("Do you want to quit? (Q) or Back to the Menu? (M)")
+# -----user interaction after function finished: Return to menu or quit?
+def fn_continue():
+    userinput=input("Do you want to quit? (Q or any key) or Back to the Menu? (M)") #user interaction indicating expected entries
     if userinput=="M" or userinput=="m": # little cheat so user can use lowercase as well
         exec(UserMenu()) #exec will run whatever function is returned as string to UserMenu()
     else:
-        exec(exit()) # exit program
+        exec(exit()) # exit program if user enters anything but M or m
 
 # ---- Data Validation -------------
 
@@ -91,15 +88,14 @@ def fn_datavalidation(): #all explained in the titles
     print(df.isnull().sum()) #outputs the number of null entries in the dataframe
     print("\n")
     # return to menu or quit
-    fn_continiue()
+    fn_continue()
 
-# ---- create summary of each variable and output summary.txt-------------
+# ---- create summary of each variable and output to summary.txt-------------
 
 def fn_textsummary(): 
     #describe ref: (https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.describe.html)
     #output to string ref: https://stackoverflow.com/questions/31247198/python-pandas-write-content-of-dataframe-into-text-file
-    irises=df['species'].unique() 
-    #unique function ref: https://www.educative.io/answers/what-is-the-unique-function-in-pandas
+    irises=df['species'].unique() #unique function ref: https://www.educative.io/answers/what-is-the-unique-function-in-pandas
     print(f"THE SUMMARY OF EACH VARIABLE IN THE IRIS DATASHEET:\n\n{df.describe().to_string()}")
     print(f"\n\n\nTHE SUMMARY OF EACH VARIABLE BY SPECIES IN THE IRIS DATASHEET:\n")
     for i in irises:
@@ -111,7 +107,7 @@ def fn_textsummary():
         f.write(f"\n\n\nTHE SUMMARY OF EACH VARIABLE BY SPECIES IN THE IRIS DATASHEET:\n")
         for i in irises:
             f.write(f"\n\t\t\t\t\t{i}\n\n{df.loc[df['species']==i][headers[0:4]].describe().to_string()}\n")
-    fn_continiue() #return to menu?
+    fn_continue() #return to menu?
 
 # ------- Create histogram of each variable and save results in png files 
 
@@ -133,6 +129,7 @@ def fn_makehists():
     cols=headers[:-1] # created shorter list from 'headers' to avoid including the 'species column' that is not one of the measurements short list stored in 'cols'
     for c in cols: # loop through list and store header names
         fn_pnghist(c)
+    fn_continue() # return to menu function
 
 # ------ Display a scatter plot of each pair of variables
 def fn_pairplot():
@@ -180,6 +177,7 @@ def fn_sepal_petal():
 def fn_scatters():
     fn_sepal_petal()
     fn_pairplot()
+    fn_continue() # return to menu function
 
 # ------- Correlation Heatmap
 def fn_heatmap():
@@ -187,7 +185,7 @@ def fn_heatmap():
     # calculate correlation
     correlation = df.corr()
     # text report
-    print(correlation)
+    print(f"\nCorrelation matrix:\n{correlation}")
     # title 
     plt.figure(figsize=(7,5))
     plt.subplots_adjust(top=0.90,left=0.2, bottom=0.28) # adjusting plot to fit title and labels
@@ -198,11 +196,13 @@ def fn_heatmap():
     plt.savefig("heatmap.png")
     plt.show()
     print("\n Plot saved as <heatmap.png>")
+    fn_continue() # return to menu function
 
 # -------------conditional means from external file
 def fn_condmeans():
     from condmeans import fn_condmeansext # importing a function from other file
-    fn_condmeansext() # run the function
+    fn_condmeansext() # run the function to draw "conditional means" plot
+    fn_continue() # return to menu function
 
 # ------------------box plot
 def fn_boxplot():
@@ -217,24 +217,24 @@ def fn_boxplot():
     #  - - then the boxlplot:
     #ref: https://www.youtube.com/watch?v=q68Qundmans&t=3076s
     plt.style.use("classic") # ref galery: http://tonysyu.github.io/raw_content/matplotlib-style-gallery/gallery.html
-    l = headers[2] #"petal length (cm)"
-    w = headers[3] #"petal width (cm)"
+    pL = headers[2] #"petal length (cm)"
+    pW = headers[3] #"petal width (cm)"
     fig, axs = plt.subplots(2, 1, figsize=(10, 5), facecolor='white') # plotting 2 subplots on top of each other, classic with white background
     for i in irises: # iterating through species
-        petal_lengths = df.loc[df['species'] == i][l] #filter to petal lenghts per species
-        petal_widths = df.loc[df['species'] == i][w] #filter to petal widths per species
-        med_petal_lengths = df.loc[df['species'] == i][l].median() # minimum petal lenghts per species for label position
-        med_petal_widths = df.loc[df['species'] == i][w].median() # minimum petal widths per species for label position
+        petal_lengths = df.loc[df['species'] == i][pL] #filter to petal lenghts per species
+        petal_widths = df.loc[df['species'] == i][pW] #filter to petal widths per species
+        med_petal_lengths = df.loc[df['species'] == i][pL].median() # minimum petal lenghts per species for label position
+        med_petal_widths = df.loc[df['species'] == i][pW].median() # minimum petal widths per species for label position
         # top plot 
         axs[0].boxplot(x=petal_lengths, vert=False) # draw boxplot of lenghts, place it horizontally
-        axs[0].set_title(f"{l} by Species") # set title from variables
-        axs[0].set_xlabel(l,size='smaller') # # set axis lable from variables
+        axs[0].set_title(f"{pL} by Species") # set title from variables
+        axs[0].set_xlabel(pL,size='smaller') # # set axis lable from variables
         axs[0].set_xlim(0,7) # Aligning the two axes to make comparison easier
         axs[0].text(med_petal_lengths,0.75,f'{i}', color='grey', size='small', ha='center') # set, position and style labels
         # bottom plot
         axs[1].boxplot(x=petal_widths, vert=False)
-        axs[1].set_title(f"{w} by Species")
-        axs[1].set_xlabel(w, size='smaller')
+        axs[1].set_title(f"{pW} by Species")
+        axs[1].set_xlabel(pW, size='smaller')
         axs[1].set_xlim(0,7) 
         axs[1].text(med_petal_widths,0.75,f'{i}', color='grey', size='small', ha='center') 
 
@@ -242,69 +242,19 @@ def fn_boxplot():
     plt.savefig("boxplot.png")
     print("\n Plot saved as <boxplot.png>")
     plt.show()
+    fn_continue() # return to menu function
 
-# ------------Classifier visualisation
-def fn_classifiervisualiser(a_number,text):
-    # ref: https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.boxplot.html
-    l = headers[2] #"petal length (cm)"
-    plt.style.use("classic") # ref galery: http://tonysyu.github.io/raw_content/matplotlib-style-gallery/gallery.html
-    plt.figure(figsize=(10,3),facecolor='white')
-    plt.title("Position of Sample value on Petal measurements")
-    for i in irises:
-        min_petal_lengths = df.loc[df['species'] == i][l].min()
-        max_petal_lengths = df.loc[df['species'] == i][l].max()
-        med_petal_lengths = df.loc[df['species'] == i][l].quantile(0.25) #left side of the box is the end of the first quantile
-        l_toboxplot=df.loc[df['species'] == i][l]
-        plt.boxplot(l_toboxplot,
-            vert=False,
-            whiskerprops={'color':'blue', 'linestyle':'-', 'lw':0.5}
-            )
-        plt.tight_layout(pad=-5)
-        plt.xlim(0,8) # set axis min and max to make rom for text
-        plt.axvline(min_petal_lengths, color='red', linestyle='-',lw=0.5) #minimum petal line
-        plt.axvline(max_petal_lengths, color='green', linestyle='-',lw=0.5) #max petal line
-        plt.axvline(a_number, color='black', linestyle=':',lw=0.5) # plotting the sample measurement from the classifier
-        plt.text(min_petal_lengths,0.75,f'←{i}(min)', color='red', size='small') # min lables
-        plt.text(max_petal_lengths+0.022,1.2,f'{i}(max)→', color='green', size='small', ha='right') # max label
-        plt.text(med_petal_lengths,0.89,f'{i} (box)', color='#4468a6', size='smaller',ha='left') # med lables
-        plt.text(a_number-0.04,1.25,f'✕ ←your sample: ({a_number}cm)\n      is {text}',color='black',bbox=dict(facecolor='yellow', alpha=0.15, edgecolor='white', pad=1), size='small') # classifier sample label
-    plt.show()
-# ------------CLassifier routine + boxplot display of sample
-def fn_classifier():
-    userinput=input(('Please enter the petal length as floating number in cm: \n')) #user defined sample size
-    test=float(userinput)
-    returnme=[]
-    petalmeasurements = []# container for min/max tresholds
-    pL = headers[2] #"petal length (cm)"
-    for species in df['species'].unique(): #select species individually to filter data
-        l_min = df.loc[df['species'] == species][pL].min() # select minimum petal length for matching species
-        l_max = df.loc[df['species'] == species][pL].max() # select maximum petal length for matching species
-        petalmeasurements.append([species, l_min, l_max]) # list container for min/max tresholds for display
-    #---create a tiny dataframe for tresholds---
-    criteria = pd.DataFrame(petalmeasurements, columns=['species','Petal Lenght min','Petal Lenght max']) 
-    #---check where sample size falls
-    result = criteria.loc[(criteria['Petal Lenght min'] <= test) & (criteria['Petal Lenght max'] >= test)]
-    if result.empty: #error handling for Empty Dataframe (ref: https://stackoverflow.com/questions/48558511/create-an-exception-for-empty-dataframe)
-        print("No matching species in the dataframe for that sample size")
-        print(f"\n \t\tClassification criteria: \n\n",criteria)
-    else: # output:
-        for index, row in result.iterrows(): # iterate if more than one result (ref: https://stackoverflow.com/questions/16476924/how-to-iterate-over-rows-in-a-dataframe-in-pandas)            
-            returnme.append(row['species']) #final result
-    print("The sample matches criteria for the following species:")
-    if returnme==[]:# exception handling if no match
-        display="not a match"
-    else:
-        display = " or ".join(returnme)
-    print(display)
-    
-    fn_classifiervisualiser(test,display) #run plot with final result and text
-    fn_continiue()
+def fn_classifier(): # saving function in separate file <classifier.py> to reduce loading time (it made very little difference 😞)
+    from classifier import fn_classify
+    fn_classify() # classification routine and visualisation - notes in the file <classifier.py> 
+    fn_continue() # return to menu function
 
 
+#--------- Program run -------------
+print('''
 
+Welcome to Iris data analysis companion suite - 2023
+Author: Norbert Antal
 
-
-
-#---!!!! ------ Program run -------------
-
+''')
 exec(UserMenu())
