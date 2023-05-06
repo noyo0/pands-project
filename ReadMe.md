@@ -219,7 +219,7 @@ The two boxplots revealed the typical measurements for each species along with t
 ##### (Program menu: 8. Classifier routine)
 
 If we were to identify species in future samples of Iris flowers without counting chromosomes we can use the min and max measurements of petal dimensions for each species to separate them and leave only the overlapping ones for chromosome counting.
-Based on petal measurements grouped by species and classifier routin was created (Program menu: 8. Classifier routine)
+Based on petal measurements grouped by species a classifier routin was created (Program menu: 8. Classifier routine)
 Since petal lenghts have a much wider variety it is the basis of the program.
 The user can enter the petal length of a new sample as a floating point number, and receive the name of the species that the sample likely belongs to, based on whether the petal length falls within the range of the minimum and maximum values of that species. If it falls into an overlapping range, both relevant species are listesd.
 The program is complete with a plot that displays the ranges of each species with a box plot and the position of the new sample data.

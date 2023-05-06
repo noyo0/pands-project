@@ -18,14 +18,15 @@
 # >>> Further references on individual problems are noted in the ReadMe.md file.
 
 # ------------- load modules  --------------
-import pandas as pd # for data analysis
+import pandas as pd # for data analysis and dataframe
 import matplotlib.pyplot as plt # for creating graphical representation of data
-import seaborn as sns # # for creating graphical representation of data
+import seaborn as sns # for creating graphical representation of data
+import os # for the clear screen function
 
-# ------------- load data and add headers --------------
-SOURCEDATA="iris.data" # store source file in global variable
-#----read in with giving headers to each column-----------------------
-headers=[ #adding headers to dataframe (later reused as global variable for filtering)
+#----read in data and give headers to each column, creating a dataframe-----------------------
+SOURCEDATA="iris.data" # store path of source file in global variable (file is in the same folder so ony file name here)
+#----read in data and add headers to each column-----------------------
+headers=[ ##adding headers to dataframe (later reused as global variable for filtering) (headers taken from iris.names)
     "sepal length (cm)", 
     "sepal width (cm)", 
     "petal length (cm)", 
@@ -44,12 +45,17 @@ irises = df['species'].unique() # store species globally for later use in filter
 # update dictionary ref: https://thispointer.com/python-how-to-add-append-key-value-pairs-in-dictionary-using-dict-update/
 # dictionary from list (zip) ref: https://stackoverflow.com/questions/209840/how-can-i-make-a-dictionary-dict-from-separate-lists-of-keys-and-values
 def UserMenu():
+    os.system('clear') # clear screen for better readability ref: https://www.geeksforgeeks.org/clear-screen-python/
+    print('''
+Welcome to Iris data analysis companion suite - 2023
+Author: Norbert Antal
+    ''')
     while UserMenu != None: #loop until user entry has match in list
         menu=[ #menu item structure: menu text, expected value from user, function to run stored as text
             {"menuTxt":"1. Data validation", "menuVal":"1", "function": "fn_datavalidation()"},
             {"menuTxt":"2. Summary of each variable" , "menuVal":"2", "function": "fn_textsummary()"},
             {"menuTxt":"3. Display and save a histogram of each varaible", "menuVal":"3", "function": "fn_makehists()"},
-            {"menuTxt":"4. Display a scatter plot of each pair of variables", "menuVal": "4", "function": "fn_pairplot()"},
+            {"menuTxt":"4. Display a scatter plot of each pair of variables", "menuVal": "4", "function": "fn_scatters()"},
             {"menuTxt":"5. Conditional means","menuVal": "5", "function": "fn_condmeans()"},
             {"menuTxt":"6. Correlation - Heatmap","menuVal": "6", "function": "fn_heatmap()"},
             {"menuTxt":"7. BoxPlot","menuVal": "7", "function": "fn_boxplot()"},
@@ -58,12 +64,13 @@ def UserMenu():
             {"menuTxt":"","menuVal": "q", "function": "exit()"}, #cheated a little so lower case q and empty entry also quits the program
             {"menuTxt":"","menuVal": "", "function": "exit()"}
             ]   
-        print("\n Please select menu number 1-8 (Q to quit):\n") #user interaction, indicate expected entry
+        print("\n USER MENU:\n") #user interaction, indicate expected entry
         for m in menu: #display menu items by iterating through menu list items
             print(m["menuTxt"]) # and print each      
         UserSelect=input("\n Please select menu number 1-8 (or Q to quit):")# userinteraction - asking for input and store same in "UserSelect"
         for m in menu: # iterate through menu items to find match
             if UserSelect==m["menuVal"]: #if "UserSelect" matches "menu" list item:
+                os.system('clear') # clear screen for better readability ref: https://www.geeksforgeeks.org/clear-screen-python/
                 print("\n✓ ",m["menuTxt"]) #user feedback - confirm selection
                 return(m["function"]) #return selected function as text to run with exec(Usermenu())
         # if there is no match profgram stays in the while loop until there is one (hence the variations that will return exit() command)
@@ -76,7 +83,7 @@ def fn_continue():
     else:
         exec(exit()) # exit program if user enters anything but M or m
 
-# ---- Data Validation -------------
+# 1.---- Data Validation -------------
 
 # ref: https://www.tutorialspoint.com/exploratory-data-analysis-on-iris-dataset
 def fn_datavalidation(): #all explained in the titles
@@ -90,7 +97,7 @@ def fn_datavalidation(): #all explained in the titles
     # return to menu or quit
     fn_continue()
 
-# ---- create summary of each variable and output to summary.txt-------------
+# 2.---- create summary of each variable and output to summary.txt-------------
 
 def fn_textsummary(): 
     #describe ref: (https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.describe.html)
@@ -101,7 +108,7 @@ def fn_textsummary():
     for i in irises:
         print(f"\n\t\t\t\t\t{i}\n\n{df.loc[df['species']==i][headers[0:4]].describe().to_string()}\n") 
         #conditional filtering ref: https://www.kdnuggets.com/2022/12/five-ways-conditional-filtering-pandas.html
-    print("Output also saved in summary.txt")
+    print("\nOutput also saved in summary.txt\n")
     with open('summary.txt','w') as f:
         f.write(f"THE SUMMARY OF EACH VARIABLE IN THE IRIS DATASHEET:\n\n{df.describe().to_string()}")
         f.write(f"\n\n\nTHE SUMMARY OF EACH VARIABLE BY SPECIES IN THE IRIS DATASHEET:\n")
@@ -109,7 +116,7 @@ def fn_textsummary():
             f.write(f"\n\t\t\t\t\t{i}\n\n{df.loc[df['species']==i][headers[0:4]].describe().to_string()}\n")
     fn_continue() #return to menu?
 
-# ------- Create histogram of each variable and save results in png files 
+# 3.------- Create histogram of each variable and save results in png files 
 
 def fn_pnghist(column): #part of histogram sequence - draws one histogram with column name stored in column argument
     # ref: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.hist.html
@@ -121,17 +128,17 @@ def fn_pnghist(column): #part of histogram sequence - draws one histogram with c
     plt.suptitle(f"Histogram of {column}")
     plt.savefig(f"{column}.png") # save plot ref: https://chartio.com/resources/tutorials/how-to-save-a-plot-to-a-file-using-matplotlib/
     plt.show() # turns out plt.show() must be left in the end of the function to avoide having all histograms on one plot 💁
-    print(f"\nPlot saved as <{column}.png>") # user feedback - display filename so user knows what to look for
+    print(f"\nPlot saved as <{column}.png>\n") # user feedback - display filename so user knows what to look for
 
-# ------ create a for loop to cycle through the variables in iris data,
-# ------- and call the 'fn_pnghist' function to draw the histograms with each variable as per their column label
+# 3.------ create a for loop to cycle through the variables in iris data,
+    # and call the 'fn_pnghist' function to draw the histograms with each variable as per their column label
 def fn_makehists():
     cols=headers[:-1] # created shorter list from 'headers' to avoid including the 'species column' that is not one of the measurements short list stored in 'cols'
     for c in cols: # loop through list and store header names
         fn_pnghist(c)
     fn_continue() # return to menu function
 
-# ------ Display a scatter plot of each pair of variables
+# 4.------ Display a scatter plot of each pair of variables
 def fn_pairplot():
     plt.style.use('fast')
     sns.pairplot(df, hue="species")  #ref: https://seaborn.pydata.org/generated/seaborn.pairplot.html
@@ -143,9 +150,9 @@ def fn_pairplot():
     plt.show(block = False)
     plt.pause(7) #plot only showed in jupyter, workaround ref: https://pythonguides.com/matplotlib-not-showing-plot/
     plt.close('all')
-    print("\n Plot saved as <pairplot.png>")
-    
-# ------ Display a scatter plot for sepal and petal measurement pairs separately
+    print("\n Plot saved as <pairplot.png>\n")
+
+# 5.------ Display a scatter plot for sepal and petal measurement pairs separately
 def fn_sepal_petal():
     #-----Set plot style 
     plt.style.use('fast') #ref: https://matplotlib.org/stable/gallery/style_sheets/index.html
@@ -171,7 +178,7 @@ def fn_sepal_petal():
     #------output to -png
     plt.savefig(f"sepal_petal.png")
     plt.show()
-    print("\n Plot saved as <sepal_petal.png>")
+    print("\n Plot saved as <sepal_petal.png>\n")
 
 # ------- display and save both versions of the scatter plots
 def fn_scatters():
@@ -195,7 +202,7 @@ def fn_heatmap():
     # save to file
     plt.savefig("heatmap.png")
     plt.show()
-    print("\n Plot saved as <heatmap.png>")
+    print("\n Plot saved as <heatmap.png>\n")
     fn_continue() # return to menu function
 
 # -------------conditional means from external file
@@ -240,21 +247,35 @@ def fn_boxplot():
 
     plt.tight_layout()
     plt.savefig("boxplot.png")
-    print("\n Plot saved as <boxplot.png>")
+    print("\n Plot saved as <boxplot.png>\n")
     plt.show()
     fn_continue() # return to menu function
 
+# ------internal (try again) menu for classifier 
+def fn_continue_classifier():
+    userinput=input("\nQuit to Menu? (Q or any key) or try again? (Y)") #user interaction indicating expected entries
+    if userinput=="Y" or userinput=="y": # little cheat so user can use lowercase as well
+        fn_classifier() # start classifier again
+    else:
+        exec(UserMenu()) # exit program if user enters anything but M or m
+
+from classifier import fn_classify
 def fn_classifier(): # saving function in separate file <classifier.py> to reduce loading time (it made very little difference 😞)
-    from classifier import fn_classify
+        #function descritpion for user
+    os.system('clear')
+    print('''
+Iris classification 
+
+The user can receive the species name based on petal length value. 
+This determination is made based on whether the petal length falls within the range of the minimum and maximum values of that species.
+The output text is updated dynamically based on whether the sample matches any of the species' petal lengths.
+If there is no match, the text indicates this and lists the minimum and maximum ranges for each species' petal lengths. 
+If the sample falls within an overlapping range, both relevant species are listed. 
+Finally, if sample value falls within a species' typical range, the output text indicates this as well.
+    ''')
     fn_classify() # classification routine and visualisation - notes in the file <classifier.py> 
-    fn_continue() # return to menu function
+    fn_continue_classifier() # internal -try again- menu
 
 
 #--------- Program run -------------
-print('''
-
-Welcome to Iris data analysis companion suite - 2023
-Author: Norbert Antal
-
-''')
 exec(UserMenu())

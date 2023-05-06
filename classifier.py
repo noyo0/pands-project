@@ -1,99 +1,118 @@
 # classifier.py
 # Author: Norbert Antal
-# Classify iris species based on the sample values of petal lengths.
+# Classify iris species based on user defined sample petal length values.
 
 # ------------- load modules  --------------
-#import numpy as np # for mathematicalfunctions
-import pandas as pd # for data analysis
-import matplotlib.pyplot as plt # for creating graphical representation of data
-import seaborn as sns # # for creating prettier graphical representation of data
+import pandas as pd # for dataframe and analysis
+import matplotlib.pyplot as plt # for creating boxplot
 
 # ------------- load data and add headers --------------
 SOURCEDATA="iris.data"
-#----read in with giving headers to each column-----------------------
-headers=[ #adding headers to dataframe (later reused as global variable for filtering)
+#----read in data and give headers to each column, creating a dataframe-----------------------
+headers=[ #adding headers to dataframe (headers taken from iris.names) + can be reused as global list variable in filtering
     "sepal length (cm)", 
     "sepal width (cm)", 
     "petal length (cm)", 
-    "petal width (cm)",
+   "petal width (cm)",
     "species"]
 df=pd.read_csv(SOURCEDATA, names=headers) # creating dataframe
+#  store species names globally for later use in filtering
+irises = df['species'].unique() # unique function ref: https://www.educative.io/answers/what-is-the-unique-function-in-pandas
 
-irises = df['species'].unique() # store species for later use in filtering
-
-
-# ------------Classifier visualisation
-def fn_classifiervisualiser(a_number,text):
-    # ref: https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.boxplot.html
-    pL = headers[2] #"petal length (cm)"
-    plt.style.use("classic") # ref galery: http://tonysyu.github.io/raw_content/matplotlib-style-gallery/gallery.html
-    plt.figure(figsize=(10,3.5),facecolor='white', frameon=False,)
-    plt.title("Position of Sample value")
-    for i in irises:
-        min_petal_lengths = df.loc[df['species'] == i][pL].min()
-        max_petal_lengths = df.loc[df['species'] == i][pL].max()
+# ------------Classifier visualisation with box plot
+# this function visualises the petal lenght data distribution on a boxplot for each species
+# displays plot lines for minimum and maximum range of petal lengths for each species
+# also displays the relative position of the sample data taken from the classifier routine including sample classification description
+def fn_classifiervisualiser(a_number,text): 
+    # argument stores the sample data from user interaction "a_number" and "text" for formated classification result
+    pL = headers[2] # store filter to the third column "petal length (cm) in a short named variable "
+    plt.style.use("classic") # style galery ref: http://tonysyu.github.io/raw_content/matplotlib-style-gallery/gallery.html
+    plt.figure(figsize=(10,3.5),facecolor='white', frameon=False,) # set figure siz and style
+    plt.title("Position of Sample value", color='magenta') # set figure title
+    for i in irises: # loop for each species
+        # find and store minimum/max and left side of box value among values that are in the same row as species in the loop in the dataframe
+            # (this is for the vertical plotlines and labels positions)
+        # a value lookup will return a list of values matching lookup criteria:
+            # anatomy: variable=dataframe.LOC[dataframe[lookuparray] == lookupvalue][returnarray]
+        min_petal_lengths = df.loc[df['species'] == i][pL].min() # adding min() will result the smallest value from the list 
+        max_petal_lengths = df.loc[df['species'] == i][pL].max() # adding max() will result the largest value from the list 
         med_petal_lengths = df.loc[df['species'] == i][pL].quantile(0.25) #left side of the box is the end of the first quantile
-        l_toboxplot=df.loc[df['species'] == i][pL]
-        plt.boxplot(x=l_toboxplot,
-            vert=False,
-            whiskerprops={'color':'blue', 'linestyle':'-', 'lw':0.5}
+        # boxplot ref: https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.boxplot.html 
+        l_toboxplot=df.loc[df['species'] == i][pL] # get data for boxplot by locating each petal lenght value for each species
+        plt.boxplot(x=l_toboxplot, # as the boxplot is inside the loop, each species values will be plotted on the same axis
+            vert=False, # plot horizontally
+            whiskerprops={'color':'blue', 'linestyle':'-', 'lw':0.5} #style the whiskers
             )
-        plt.tight_layout(pad=0.5)
-        plt.xlim(0,8) # set axis min and max to make room for text
-        plt.xlabel("Petal length (cm)", size='small')
-        plt.yticks([])
-        plt.axvline(min_petal_lengths, color='red', linestyle='-',lw=0.5) #minimum petal line
+        plt.tight_layout(pad=0.5) # prevents labels overlapping ref: https://www.statology.org/matplotilb-tight_layout/
+        plt.xlim(0,8) # set axis min and max to make room for text, ref: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlim.html
+        plt.xlabel("Petal length (cm)", size='small') # set x axis label
+        plt.yticks([]) #hide y axle tick label ref: https://www.geeksforgeeks.org/how-to-hide-axis-text-ticks-or-tick-labels-in-matplotlib/
+        # plot lines ref: https://www.geeksforgeeks.org/matplotlib-pyplot-axvline-in-python/
+        plt.axvline(min_petal_lengths, color='red', linestyle='-',lw=0.5) # minimum petal line
         plt.axvline(max_petal_lengths, color='green', linestyle='-',lw=0.5) #max petal line
-        plt.axvline(a_number, color='magenta', linestyle=':',lw=1) # plotting the sample measurement from the classifier
+        plt.axvline(a_number, color='magenta', linestyle='solid',lw=3, ymin=0.8) # sample value from the classifier, short line ref: https://www.skytowner.com/explore/drawing_a_vertical_line_in_matplotlib
+        # plot line lables - plt.text ref: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.text.html
         plt.text(min_petal_lengths,0.75,f'←{i}(min)', color='red', size='small') # min lables
         plt.text(max_petal_lengths+0.01,1.2,f'{i}(max)→', color='green', size='small', ha='right') # max label
         plt.text(med_petal_lengths,0.87,f'{i} (box)', color='#4468a6', size='smaller',ha='left') # med lables
-        plt.text(a_number-0.02,1.3,f' ←your sample: ({a_number}cm)\n      {text}',color='black',bbox=dict(facecolor='magenta', alpha=0.175, edgecolor='white', pad=0.5), size='small') # classifier sample label
+        plt.text(a_number-0.02,1.3, # classifier sample data label with background colour ref: https://stackoverflow.com/questions/17086847/box-around-text-in-matplotlib
+                 f' ←your sample: ({a_number}cm)\n      {text}',
+                 color='white',bbox=dict(facecolor='magenta', alpha=0.175, edgecolor='white', pad=1.5), 
+                 size='small') 
     plt.show()
-# ------------CLassifier routine + boxplot display of sample
+
+# ------------CLassifier routine ----------------------------------
+# function description displayed when the function called
 def fn_classify():
-    userinput=input(('Please enter the petal length as floating number in cm: \n')) #user defined sample size
-    test=float(userinput)
-    display = "no match"
-    returnme=[]
-    petalmeasurements = []# container for min/max tresholds
-    typicalmeasurements = []# container for tipical range
-    pL = headers[2] #"petal length (cm)"
-    for species in df['species'].unique(): #select species individually to filter data
-        l_min = df.loc[df['species'] == species][pL].min() # select minimum petal length for matching species
-        l_max = df.loc[df['species'] == species][pL].max() # select maximum petal length for matching species
-        boxleft = df.loc[df['species'] == species][pL].quantile(0.25) #left side of the box is the end of the first quantile
-        boxright = df.loc[df['species'] == species][pL].quantile(0.75) #right side of the box is the end of the third quantile
-        petalmeasurements.append([species, l_min, l_max]) # list container for min/max tresholds 
-        typicalmeasurements.append([species, boxleft, boxright]) # container for typical range
-    #---create tiny dataframes for tresholds---
+    userinput=input(('Please enter the petal length as floating-point number in cm: \n')) #user defines sample size
+    sample=float(userinput) # user entry converted float as Iris data is also float
+    display = "✕" # default value to display
+    returnme=[] # result container for species names
+    petalmeasurements = []# container for min/max petal length range
+    typicalmeasurements = []# container for tipical petal length range
+    pL = headers[2] # store filter to the third column "petal length (cm) in a short named variable "
+    # loop for each species
+        # find and store values for lable and plotline locations
+        # a value lookup will return a list of values matching lookup criteria:
+            # anatomy: variable=dataframe.LOC[dataframe[lookuparray] == lookupvalue][returnarray]
+            #for species in df['species'].unique()
+    for i in irises: #select species individually to filter data
+        l_min = df.loc[df['species'] == i][pL].min() # select minimum petal length for matching species
+        l_max = df.loc[df['species'] == i][pL].max() # select maximum petal length for matching species
+        boxleft = df.loc[df['species'] == i][pL].quantile(0.25) #left side of the box is the end of the first quantile
+        boxright = df.loc[df['species'] == i][pL].quantile(0.75) #right side of the box is the end of the third quantile
+        petalmeasurements.append([i, l_min, l_max]) # list container for min/max tresholds 
+        typicalmeasurements.append([i, boxleft, boxright]) # container for typical range
+    #-create tiny dataframes for lookup ranges
     criteria = pd.DataFrame(petalmeasurements, columns=['species','Petal Lenght min','Petal Lenght max']) 
     typical = pd.DataFrame(typicalmeasurements, columns=['species','typicalmin','typicalmax'])
-    #---check where sample size falls
-    result = criteria.loc[(criteria['Petal Lenght min'] <= test) & (criteria['Petal Lenght max'] >= test)]
-    typicalsample = typical.loc[(typical['typicalmin'] <= test) & (typical['typicalmax'] >= test)]
-    
-    if result.empty: #error handling for Empty Dataframe (ref: https://stackoverflow.com/questions/48558511/create-an-exception-for-empty-dataframe)
-        print("No matching species in the dataframe for that sample size")
-        print(f"\n \t\tClassification criteria: \n\n",criteria)
-    else: # output:
-        for index, row in result.iterrows(): # iterate if more than one result (ref: https://stackoverflow.com/questions/16476924/how-to-iterate-over-rows-in-a-dataframe-in-pandas)            
-            returnme.append(row['species']) #final result
-    # output results
-    if returnme==[]:# exception handling if no match
-        display="not a match"
-    else:
-        verdict = " or ".join(returnme) # result can be one ore two species
-    #    display = " or ".join(returnme) # output with sensible language
-    # check for typical:
-        if len(returnme) == 1: # if hit list has one member it is checked for typical
+    #-lookups with sample value
+    result = criteria.loc[(criteria['Petal Lenght min'] <= sample) & (criteria['Petal Lenght max'] >= sample)]
+    typicalsample = typical.loc[(typical['typicalmin'] <= sample) & (typical['typicalmax'] >= sample)]
+    #-classification based on lookup results
+    if result.empty: #error handling for out of range samples (ref: https://stackoverflow.com/questions/48558511/create-an-exception-for-empty-dataframe)
+        plotme=0 # block boxplot function as there is nothing to plot - out of range procedure
+    else: # output if there is a match:
+        plotme=1 # unblock boxplot function - within range procedure
+        for index, row in result.iterrows(): # iterate for more than one result (ref: https://stackoverflow.com/questions/16476924/how-to-iterate-over-rows-in-a-dataframe-in-pandas)            
+            returnme.append(row['species']) #result(s) added to the result lilst
+        verdict = " or ".join(returnme) # text to express result is two species
+        if len(returnme) == 1: # if result only one species it is checked if within typical range
             if typicalsample.empty:
-                display = f"The sample is likely an {verdict}"
+                display = f"The sample is likely an {verdict}" # if not tipical, say it's likely
             else:
-                display = f"The sample is a typical {verdict}"
-        else:
-            display = f"The sample is non-typical \n     could be either {verdict}"
-
-    #print(display)
+                display = f"The sample is a typical {verdict}" # if it is typical 
+        else: # if result is not exactly 1, the sample is ambiguous
+            display = f"The sample is ambiguous \n     could be either {verdict}" #format text accordingly
+    print(display) # output dynamically formatted text to terminal
     
-    fn_classifiervisualiser(test,display) #run plot with final result and text
+    if plotme == 1: # 0 is out of range procedure, 1 is within range procedure
+        fn_classifiervisualiser(sample,display) #run plot with final result and dynamically formatted text if sample is within range
+    else: # user interaction if sample out of range and run classifier function again.
+        print('''
+                        Sample is out of range
+    No matching species in the dataframe for that sample size
+        ''')
+        print(f"\n \t\tClassification criteria: \n\n",criteria,"\n\n") # remind user of valid range
+        print('Please try again:') 
+        fn_classify() # run function from the top
