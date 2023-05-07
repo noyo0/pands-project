@@ -33,10 +33,11 @@ headers=[ #adding headers to dataframe (later reused as global variable for filt
     "petal width (cm)",
     "species"]
 df=pd.read_csv(SOURCEDATA, names=headers) # creating dataframe
+# store species names globally for later use in filtering 
+irises = df['species'].unique() #unique function ref: https://www.educative.io/answers/what-is-the-unique-function-in-pandas
 
-irises = df['species'].unique() # store species globally for later use in filtering 
-
-# --------User interaction - Menu ref: Week06 Practice - Studentmanagement.py
+# ------------Create usermenu
+# User Menu ref: Week06 Practice - Studentmanagement.py
 # return keyword ref: https://www.w3schools.com/python/ref_keyword_return.asp
 # execute function stored as string ref: https://www.geeksforgeeks.org/exec-in-python/
 # get list index numbers ref: https://towardsdatascience.com/looping-in-python-5289a99a116e#:~:text=Using%20the%20enumerate()%20Function&text=The%20enumerate()%20function%20takes,(the%20default%20is%200).&text=And%20that's%20it!
@@ -52,11 +53,11 @@ Author: Norbert Antal - 2023
         menu=[ #menu item structure: menu text, expected value from user, function to run stored as text
             {"menuTxt":"1. Data validation", "menuVal":"1", "function": "fn_datavalidation()"},
             {"menuTxt":"2. Summary of each variable" , "menuVal":"2", "function": "fn_textsummary()"},
-            {"menuTxt":"3. Display and save a histogram of each varaible", "menuVal":"3", "function": "fn_makehists()"},
+            {"menuTxt":"3. Display and save a histogram for each varaible", "menuVal":"3", "function": "fn_makehists()"},
             {"menuTxt":"4. Display a scatter plot of each pair of variables", "menuVal": "4", "function": "fn_scatters()"},
             {"menuTxt":"5. Conditional means","menuVal": "5", "function": "fn_condmeans()"},
             {"menuTxt":"6. Correlation - Heatmap","menuVal": "6", "function": "fn_heatmap()"},
-            {"menuTxt":"7. BoxPlot","menuVal": "7", "function": "fn_boxplot()"},
+            {"menuTxt":"7. Measurement distribution - BoxPlot","menuVal": "7", "function": "fn_boxplot()"},
             {"menuTxt":"8. Classifier routine - please try it, it's wonderful!","menuVal": "8", "function": "fn_classifier()"},
             {"menuTxt":"Q - Quit","menuVal": "Q", "function": "exit()"},
             {"menuTxt":"","menuVal": "q", "function": "exit()"}, #cheated a little so lower case q and empty entry also quits the program
@@ -101,10 +102,9 @@ def fn_datavalidation():
 def fn_textsummary(): 
     #describe ref: (https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.describe.html)
     #output to string ref: https://stackoverflow.com/questions/31247198/python-pandas-write-content-of-dataframe-into-text-file
-    irises=df['species'].unique() #unique function ref: https://www.educative.io/answers/what-is-the-unique-function-in-pandas
     print(f"THE SUMMARY OF EACH VARIABLE IN THE IRIS DATASHEET:\n\n{df.describe().to_string()}")
     print(f"\n\n\nTHE SUMMARY OF EACH VARIABLE BY SPECIES IN THE IRIS DATASHEET:\n")
-    for i in irises:
+    for i in irises: #irises is a global variable containing species names only
         #lookup/conditional filtering ref: https://www.kdnuggets.com/2022/12/five-ways-conditional-filtering-pandas.html
         # anatomy: dataframe.LOC[dataframe[lookuparray] == lookupvalue][returnarray].function() or functions
         print(f"\n\t\t\t\t\t{i}\n\n{df.loc[df['species']==i][headers[0:4]].describe().to_string()}\n") 
@@ -117,7 +117,7 @@ def fn_textsummary():
     fn_continue() # return to menu or quit
 #-------------------------end of function
 
-# 3.------- Create histogram of each variable and save results in png files 
+# 3.------- Create histogram of each variable and save results in png files  - 2 segments A, B
     
     # 3A. ------First set up histogram template
 def fn_pnghist(column): # part of histogram sequence - draws one histogram with column name stored in column argument
@@ -143,7 +143,7 @@ def fn_makehists():
 #-------------------------end of function
 #--------------------end of segment 3.
 
-# 4.------ Display a scatter plot of each pair of variables
+# 4.------ Display a scatter plot of each pair of variables - 3 segments A, B, C
     # 4A.------Pair plot for each pair of measurements
 def fn_pairplot(): #pairplot ref: https://www.youtube.com/watch?v=b7JuBsswDlo&t=45s
     plt.style.use('fast') # set style
@@ -196,50 +196,55 @@ def fn_scatters():
 #-------------------------end of function
 #--------------------end of segment 4.
 
-# ------- Correlation Heatmap
+# 5.----------Conditional means from external file
+# this is for testing code partitioning and external functions
+def fn_condmeans():
+    from condmeans import fn_condmeansext # importing a function from external file <condmeans.py>
+    fn_condmeansext() # run the function to draw "conditional means" plot
+    fn_continue() # return to menu function
+#-------------------------end of function
+
+# 6.------ Correlation - Heatmap
 def fn_heatmap():
     # correlation heatmap ref: https://zion-oladiran.medium.com/exploratory-data-analysis-iris-dataset-68897497b120
-    # calculate correlation
-    correlation = df.corr()
+    correlation = df.corr() # calculate correlation with corr() ref: https://www.geeksforgeeks.org/python-pandas-dataframe-corr/
     # text report
     print(f"\nCorrelation matrix:\n{correlation}")
     # title 
-    plt.figure(figsize=(7,5))
+    plt.figure(figsize=(7,5)) # set figure size
     plt.subplots_adjust(top=0.90,left=0.2, bottom=0.28) # adjusting plot to fit title and labels
-    plt.suptitle("Correlation - Heatmap", fontdict={"family":"serif","color":"#4a6741",'weight':'bold',"size":12})
+    plt.suptitle("Correlation - Heatmap", fontdict={"family":"serif","color":"#4a6741",'weight':'bold',"size":12})# set title and style
     # heatmap
-    sns.heatmap(correlation, annot=True, cmap='Greens')
-    plt.tight_layout()
+    sns.heatmap(correlation, annot=True, cmap='Greens') # render heatmap
+    plt.tight_layout() # prevent lable overlaps
     # save to file
     plt.savefig("heatmap.png")
     plt.show()
-    print("\n Plot saved as <heatmap.png>\n")
+    print("\n Plot saved as <heatmap.png>\n") # userfeedback - file name
     fn_continue() # return to menu function
+#-------------------------end of function
 
-# -------------conditional means from external file
-def fn_condmeans():
-    from condmeans import fn_condmeansext # importing a function from other file
-    fn_condmeansext() # run the function to draw "conditional means" plot
-    fn_continue() # return to menu function
-
-# ------------------box plot
+# 7.------------------Measurement distribution box plot
 def fn_boxplot():
-
-    # - - first a list of minimax data per species:
-     # pandas tutorial to filter data ref: https://www.youtube.com/watch?v=vmEHCJofslg&t=111s
-    # limit describe output to min and max ref: https://stackoverflow.com/questions/19124148/modify-output-from-python-pandas-describe, 
-    irises = df['species'].unique()
-    for i in irises:
+    # print a list of petal measurement ranges (min/max) per species:
+        # pandas tutorial to filter data ref: https://www.youtube.com/watch?v=vmEHCJofslg&t=111s
+        # limit describe output to min and max ref: https://stackoverflow.com/questions/19124148/modify-output-from-python-pandas-describe, 
+    for i in irises: #irises is a global variable containing species names only
+        # filter/lookup anatomy: dataframe.LOC[dataframe[lookuparray] == lookupvalue][returnarray].function() or functions
+        # this lookpup filters petal lenght and width (header[2:4]) where species equals to the current iteration in the irises loop 
+        # then applies two arguments (min and max) of the describe() function
+        # prints the iterations of the loop (species name) the header names and the min/max value for each iteration
         print(i,'\n',df.loc[df['species']==i][headers[2:4]].describe().loc[['min','max']]) 
 
-    #  - - then the boxlplot:
+    # plot the boxlplot:
     #ref: https://www.youtube.com/watch?v=q68Qundmans&t=3076s
+    #ref: https://www.geeksforgeeks.org/box-plot-in-python-using-matplotlib/
     plt.style.use("classic") # ref galery: http://tonysyu.github.io/raw_content/matplotlib-style-gallery/gallery.html
     pL = headers[2] #"petal length (cm)"
     pW = headers[3] #"petal width (cm)"
     fig, axs = plt.subplots(2, 1, figsize=(10, 5), facecolor='white') # plotting 2 subplots on top of each other, classic with white background
 
-    for i in irises: # iterating through species
+    for i in irises: # iterating through species #irises is a global variable containing species names only
         petal_lengths = df.loc[df['species'] == i][pL] #filter to petal lenghts per species
         petal_widths = df.loc[df['species'] == i][pW] #filter to petal widths per species
         med_petal_lengths = df.loc[df['species'] == i][pL].median() # minimum petal lenghts per species for label position
@@ -263,26 +268,33 @@ def fn_boxplot():
     print("\n Plot saved as <boxplot.png>\n")
     plt.show()
     fn_continue() # return to menu function
+#-------------------------end of function
 
-# ------internal (try again) menu for classifier 
+
+# 8.-----------------------------THE WONDERFUL CLASSIFIER
+
+    #8.A------internal (try again) menu for classifier 
+    # function allows user to try multiple samples without restarting the program or using the main menu
 def fn_continue_classifier():
     userinput=input("\nQuit to Menu? (Q or any key) or try again? (Y)") #user interaction indicating expected entries
     if userinput=="Y" or userinput=="y": # little cheat so user can use lowercase as well
         fn_classifier() # start classifier again
     else:
         exec(UserMenu()) # exit program if user enters anything but M or m
+#-------------------------end of function
 
+    # 8.B------the classifier is a two part (classifier and visualiser) routine partitioned externally
 from classifier import fn_classify
-# The functions for the classifier routine were saved as a separate file and loaded byck into analysis.py to test if it reduces loading time
+# The functions for the classifier routine were saved as a separate file and loaded back into analysis.py to test if it reduces loading time
     # online references were inconclusive:
         # Partitioning improves performance ref: https://gamedev.stackexchange.com/questions/203710/does-having-code-spread-in-multiple-files-decrease-performance
         # Partitioning has little effect ref: https://stackoverflow.com/questions/1083105/does-creating-separate-functions-instead-of-one-big-one-slow-processing-time
 # It was found that there was no significant change in loading time for analysis.py by partitioning classifier.py (also condmeans.py) to separate files
     # Perhaps the overall amount of code is so little that partitioning has no menaingfull effect.
-
 def fn_classifier(): # saving function in separate file <classifier.py> to reduce loading time (it made very little difference 😞)
         #function descritpion for user
     os.system('clear')
+    #user interaction, brief
     print('''
 Iris classification 
 
