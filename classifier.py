@@ -34,7 +34,7 @@ def fn_classifiervisualiser(a_number,text):
     # argument stores the sample data from user interaction "a_number" and "text" for formated classification result
     pL = headers[2] # store filter to the third column "petal length (cm) in a short named variable "
     plt.style.use("classic") # style galery ref: http://tonysyu.github.io/raw_content/matplotlib-style-gallery/gallery.html
-    plt.figure(figsize=(10,3.5),facecolor='white', frameon=False,) # set figure siz and style
+    plt.figure(figsize=(10,3.5),facecolor='white', frameon=True,) # set figure siz and style
     plt.title("Position of Sample value", color='magenta') # set figure title
     for i in irises: # loop for each species
         # find and store minimum/max and left side of box value among values that are in the same row as species in the loop in the dataframe
